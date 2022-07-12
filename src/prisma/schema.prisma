@@ -1,0 +1,232 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model gdpr_consent {
+  consentID        Int               @id @default(autoincrement())
+  startDate        DateTime?         @db.Date
+  endDate          DateTime?         @db.Date
+  processing       Int?
+  contract         Int?
+  dataSubject      Int?
+  gdpr_contract    gdpr_contract?    @relation(fields: [contract], references: [contractID], onDelete: NoAction, onUpdate: NoAction, map: "gdpr_consent_ibfk_2")
+  gdpr_datasubject gdpr_datasubject? @relation(fields: [dataSubject], references: [dataSubjectID], onDelete: NoAction, onUpdate: NoAction, map: "gdpr_consent_ibfk_3")
+  gdpr_processing  gdpr_processing?  @relation(fields: [processing], references: [processingID], onDelete: NoAction, onUpdate: NoAction, map: "gdpr_consent_ibfk_1")
+
+  @@index([contract], map: "contract")
+  @@index([dataSubject], map: "dataSubject")
+  @@index([processing], map: "processing")
+}
+
+model gdpr_context {
+  environmentName String            @id @db.VarChar(100)
+  gdpr_ontology   gdpr_ontology[]
+  gdpr_processing gdpr_processing[]
+}
+
+model gdpr_contract {
+  contractID       Int               @id @default(autoincrement())
+  signaturedate    DateTime?         @db.Date
+  expirationDate   DateTime?         @db.Date
+  dataSubject      Int?
+  gdpr_datasubject gdpr_datasubject? @relation(fields: [dataSubject], references: [dataSubjectID], onDelete: NoAction, onUpdate: NoAction, map: "gdpr_contract_ibfk_1")
+  gdpr_consent     gdpr_consent[]
+
+  @@index([dataSubject], map: "dataSubject")
+}
+
+model gdpr_country {
+  countryName       String              @id @db.VarChar(100)
+  gdpr_dataconsumer gdpr_dataconsumer[]
+  gdpr_provider     gdpr_provider[]
+  gdpr_tutor        gdpr_tutor[]
+}
+
+model gdpr_data {
+  dataID                     Int                          @id
+  source                     String?                      @db.VarChar(25)
+  dataConservation           Int?
+  isPersonal                 Boolean?
+  dataTypeName               String?                      @db.VarChar(40)
+  personalDataCategory       Int?
+  isModifiable               Boolean?
+  gdpr_datatype              gdpr_datatype?               @relation(fields: [dataTypeName], references: [dataTypeName], onDelete: NoAction, onUpdate: NoAction, map: "gdpr_data_ibfk_1")
+  gdpr_personaldatacategory  gdpr_personaldatacategory?   @relation(fields: [personalDataCategory], references: [PDCategoryID], onDelete: NoAction, onUpdate: NoAction, map: "gdpr_data_ibfk_2")
+  gdpr_datarequest           gdpr_datarequest[]
+  gdpr_datausage             gdpr_datausage[]
+  gdpr_personaldatareception gdpr_personaldatareception[]
+
+  @@index([dataTypeName], map: "dataTypeName")
+  @@index([personalDataCategory], map: "personalDataCategory")
+}
+
+model gdpr_dataconsumer {
+  dataConsumerID             Int                          @id @default(autoincrement())
+  dconsumerName              String                       @db.VarChar(40)
+  dcCategory                 Int?
+  country                    String?                      @db.VarChar(100)
+  gdpr_country               gdpr_country?                @relation(fields: [country], references: [countryName], onDelete: NoAction, onUpdate: NoAction, map: "gdpr_dataconsumer_ibfk_2")
+  gdpr_dataconsumercategory  gdpr_dataconsumercategory?   @relation(fields: [dcCategory], references: [dcCategoryID], onDelete: NoAction, onUpdate: NoAction, map: "gdpr_dataconsumer_ibfk_1")
+  gdpr_personaldatareception gdpr_personaldatareception[]
+
+  @@index([country], map: "country")
+  @@index([dcCategory], map: "dcCategory")
+}
+
+model gdpr_dataconsumercategory {
+  dcCategoryID      Int                 @id @default(autoincrement())
+  dcCategoryName    String?             @db.VarChar(40)
+  gdpr_dataconsumer gdpr_dataconsumer[]
+}
+
+model gdpr_datarequest {
+  DataRequestID          Int                      @id
+  claim                  String?                  @db.VarChar(250)
+  claimDate              DateTime?                @db.DateTime(0)
+  newValue               String?                  @db.VarChar(250)
+  dataReqType            String?                  @db.VarChar(25)
+  dataSubject            Int?
+  data                   Int?
+  gdpr_data              gdpr_data?               @relation(fields: [data], references: [dataID], onDelete: NoAction, onUpdate: NoAction, map: "gdpr_datarequest_ibfk_1")
+  gdpr_datasubject       gdpr_datasubject?        @relation(fields: [dataSubject], references: [dataSubjectID], onDelete: NoAction, onUpdate: NoAction, map: "gdpr_datarequest_ibfk_2")
+  gdpr_datarequestanswer gdpr_datarequestanswer[]
+
+  @@index([data], map: "data")
+  @@index([dataSubject], map: "dataSubject")
+}
+
+model gdpr_datarequestanswer {
+  dataRequestAnswerid Int               @id
+  answer              Boolean?
+  justification       String?           @db.VarChar(150)
+  datarequest         Int?
+  gdpr_datarequest    gdpr_datarequest? @relation(fields: [datarequest], references: [DataRequestID], onDelete: NoAction, onUpdate: NoAction, map: "gdpr_datarequestanswer_ibfk_1")
+
+  @@index([datarequest], map: "datarequest")
+}
+
+model gdpr_datasubject {
+  dataSubjectID            Int                       @id
+  data_subject_id_ref      Int                       @default(0)
+  dsCategory               String?                   @db.VarChar(40)
+  tutor                    Int?
+  gdpr_datasubjectcategory gdpr_datasubjectcategory? @relation(fields: [dsCategory], references: [dsCategory], onDelete: NoAction, onUpdate: NoAction, map: "const1")
+  gdpr_consent             gdpr_consent[]
+  gdpr_contract            gdpr_contract[]
+  gdpr_datarequest         gdpr_datarequest[]
+
+  @@index([dsCategory], map: "const1")
+  @@index([data_subject_id_ref], map: "const2")
+}
+
+model gdpr_datasubjectcategory {
+  dsCategory       String             @id @db.VarChar(25)
+  locationID       String?            @db.VarChar(40)
+  gdpr_datasubject gdpr_datasubject[]
+}
+
+model gdpr_datatype {
+  dataTypeName String      @id @db.VarChar(40)
+  gdpr_data    gdpr_data[]
+}
+
+model gdpr_datausage {
+  id              Int              @id @default(autoincrement())
+  personalStatus  Boolean?         @default(false)
+  C               Boolean?         @default(false)
+  r               Boolean?         @default(false)
+  u               Boolean?         @default(false)
+  d               Boolean?         @default(false)
+  data            Int?
+  processing      Int?
+  gdpr_data       gdpr_data?       @relation(fields: [data], references: [dataID], onDelete: NoAction, onUpdate: NoAction, map: "gdpr_datausage_ibfk_1")
+  gdpr_processing gdpr_processing? @relation(fields: [processing], references: [processingID], onDelete: NoAction, onUpdate: NoAction, map: "gdpr_datausage_ibfk_2")
+
+  @@index([data], map: "data")
+  @@index([processing], map: "processing")
+}
+
+model gdpr_ontology {
+  ontologyName String        @id @db.VarChar(100)
+  context      String?       @db.VarChar(100)
+  gdpr_context gdpr_context? @relation(fields: [context], references: [environmentName], onDelete: NoAction, onUpdate: NoAction, map: "gdpr_ontology_ibfk_1")
+
+  @@index([context], map: "context")
+}
+
+model gdpr_personaldatacategory {
+  PDCategoryID         Int         @id
+  personalDataCategory String?     @db.VarChar(150)
+  gdpr_data            gdpr_data[]
+}
+
+model gdpr_personaldatareception {
+  data              Int
+  processing        Int
+  dataConsumer      Int
+  gdpr_data         gdpr_data         @relation(fields: [data], references: [dataID], onDelete: NoAction, onUpdate: NoAction, map: "gdpr_personaldatareception_ibfk_1")
+  gdpr_dataconsumer gdpr_dataconsumer @relation(fields: [dataConsumer], references: [dataConsumerID], onDelete: NoAction, onUpdate: NoAction, map: "gdpr_personaldatareception_ibfk_3")
+  gdpr_processing   gdpr_processing   @relation(fields: [processing], references: [processingID], onDelete: NoAction, onUpdate: NoAction, map: "gdpr_personaldatareception_ibfk_2")
+
+  @@id([data, processing, dataConsumer])
+  @@index([dataConsumer], map: "dataConsumer")
+  @@index([processing], map: "processing")
+}
+
+model gdpr_processing {
+  processingID               Int                          @id
+  processingName             String?                      @db.VarChar(25)
+  processingType             String?                      @db.VarChar(25)
+  processingCategory         String?                      @db.VarChar(25)
+  creationDate               DateTime?                    @db.Date
+  updatingDate               DateTime?                    @db.Date
+  isService                  Boolean?
+  context                    String?                      @db.VarChar(100)
+  gdpr_context               gdpr_context?                @relation(fields: [context], references: [environmentName], onDelete: NoAction, onUpdate: NoAction, map: "gdpr_processing_ibfk_1")
+  gdpr_consent               gdpr_consent[]
+  gdpr_datausage             gdpr_datausage[]
+  gdpr_personaldatareception gdpr_personaldatareception[]
+  gdpr_purpose               gdpr_purpose[]
+
+  @@index([context], map: "context")
+}
+
+model gdpr_provider {
+  providerID   Int           @id @default(autoincrement())
+  prName       String        @db.VarChar(40)
+  username     String?       @db.VarChar(25)
+  prAdress     String        @db.VarChar(250)
+  prPostalCode String?       @db.VarChar(40)
+  city         String?       @db.VarChar(40)
+  prPhone      String?       @db.VarChar(40)
+  prEmail      String?       @db.VarChar(40)
+  country      String?       @db.VarChar(100)
+  gdpr_country gdpr_country? @relation(fields: [country], references: [countryName], onDelete: NoAction, onUpdate: NoAction, map: "gdpr_provider_ibfk_1")
+
+  @@index([country], map: "country")
+}
+
+model gdpr_purpose {
+  purposeID       Int              @id @default(autoincrement())
+  description     String           @db.VarChar(200)
+  type            String?          @db.VarChar(10)
+  processing      Int?
+  gdpr_processing gdpr_processing? @relation(fields: [processing], references: [processingID], onDelete: NoAction, onUpdate: NoAction, map: "gdpr_purpose_ibfk_1")
+
+  @@index([processing], map: "processing")
+}
+
+model gdpr_tutor {
+  tutorID      Int           @id @default(autoincrement())
+  tutorName    String        @db.VarChar(40)
+  username     String?       @db.VarChar(25)
+  country      String?       @db.VarChar(100)
+  gdpr_country gdpr_country? @relation(fields: [country], references: [countryName], onDelete: NoAction, onUpdate: NoAction, map: "gdpr_tutor_ibfk_1")
+
+  @@index([country], map: "country")
+}
