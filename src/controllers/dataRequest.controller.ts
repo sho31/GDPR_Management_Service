@@ -1,14 +1,13 @@
 import { NextFunction, Request, Response } from 'express';
-import { DataRequest } from '@prisma/client';
-import { CreateDataRequestDto } from '@dtos/dataRequests.dto';
-import dataRequestService from '@services/dataRequests.service';
+import { gdpr_datarequest } from '@prisma/client';
+import dataRequestService from '@services/dataRequest.service';
 
 class DataRequestsController {
   public dataRequestService = new dataRequestService();
 
   public getDataRequests = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
     try {
-      const findAllDataRequestsData: DataRequest[] = await this.dataRequestService.findAllDataRequest();
+      const findAllDataRequestsData: gdpr_datarequest[] = await this.dataRequestService.findAllDataRequest();
 
       res.status(200).json({ data: findAllDataRequestsData, message: 'findAll' });
     } catch (error) {
@@ -19,7 +18,7 @@ class DataRequestsController {
   public getDataRequestById = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
     try {
       const dataRequestId = Number(req.params.id);
-      const findOneDataRequestData: DataRequest = await this.dataRequestService.findDataRequestById(dataRequestId);
+      const findOneDataRequestData: gdpr_datarequest = await this.dataRequestService.findDataRequestById(dataRequestId);
 
       res.status(200).json({ data: findOneDataRequestData, message: 'findOne' });
     } catch (error) {
@@ -29,8 +28,8 @@ class DataRequestsController {
 
   public createDataRequest = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
     try {
-      const dataRequestData: CreateDataRequestDto = req.body;
-      const createDataRequestData: DataRequest = await this.dataRequestService.createDataRequest(dataRequestData);
+      const dataRequestData: gdpr_datarequest = req.body;
+      const createDataRequestData: gdpr_datarequest = await this.dataRequestService.createDataRequest(dataRequestData);
 
       res.status(201).json({ data: createDataRequestData, message: 'created' });
     } catch (error) {
@@ -41,8 +40,8 @@ class DataRequestsController {
   public updateDataRequest = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
     try {
       const dataRequestId = Number(req.params.id);
-      const dataRequestData: CreateDataRequestDto = req.body;
-      const updateDataRequestData: DataRequest = await this.dataRequestService.updateDataRequest(dataRequestId, dataRequestData);
+      const dataRequestData: gdpr_datarequest = req.body;
+      const updateDataRequestData: gdpr_datarequest = await this.dataRequestService.updateDataRequest(dataRequestId, dataRequestData);
 
       res.status(200).json({ data: updateDataRequestData, message: 'updated' });
     } catch (error) {
@@ -53,7 +52,7 @@ class DataRequestsController {
   public deleteDataRequest = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
     try {
       const dataRequestId = Number(req.params.id);
-      const deleteDataRequestData: DataRequest = await this.dataRequestService.deleteDataRequest(dataRequestId);
+      const deleteDataRequestData: gdpr_datarequest = await this.dataRequestService.deleteDataRequest(dataRequestId);
 
       res.status(200).json({ data: deleteDataRequestData, message: 'deleted' });
     } catch (error) {

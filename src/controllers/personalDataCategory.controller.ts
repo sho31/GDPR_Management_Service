@@ -1,14 +1,13 @@
 import { NextFunction, Request, Response } from 'express';
-import { PersonalDataCategory } from '@prisma/client';
-import { CreatePersonalDataCategoryDto } from '@dtos/personalDataCategories.dto';
-import personalDataCategorieservice from '@services/personalDataCategories.service';
+import { gdpr_personaldatacategory } from '@prisma/client';
+import personalDataCategorieservice from '@services/personalDataCategory.service';
 
 class PersonalDataCategoriesController {
   public personalDataCategorieservice = new personalDataCategorieservice();
 
   public getPersonalDataCategories = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
     try {
-      const findAllPersonalDataCategoriesData: PersonalDataCategory[] = await this.personalDataCategorieservice.findAllPersonalDataCategory();
+      const findAllPersonalDataCategoriesData: gdpr_personaldatacategory[] = await this.personalDataCategorieservice.findAllPersonalDataCategory();
 
       res.status(200).json({ data: findAllPersonalDataCategoriesData, message: 'findAll' });
     } catch (error) {
@@ -19,7 +18,7 @@ class PersonalDataCategoriesController {
   public getPersonalDataCategoryById = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
     try {
       const personalDataCategoryId = Number(req.params.id);
-      const findOnePersonalDataCategoryData: PersonalDataCategory = await this.personalDataCategorieservice.findPersonalDataCategoryById(personalDataCategoryId);
+      const findOnePersonalDataCategoryData: gdpr_personaldatacategory = await this.personalDataCategorieservice.findPersonalDataCategoryById(personalDataCategoryId);
 
       res.status(200).json({ data: findOnePersonalDataCategoryData, message: 'findOne' });
     } catch (error) {
@@ -29,8 +28,8 @@ class PersonalDataCategoriesController {
 
   public createPersonalDataCategory = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
     try {
-      const personalDataCategoryData: CreatePersonalDataCategoryDto = req.body;
-      const createPersonalDataCategoryData: PersonalDataCategory = await this.personalDataCategorieservice.createPersonalDataCategory(personalDataCategoryData);
+      const personalDataCategoryData: gdpr_personaldatacategory = req.body;
+      const createPersonalDataCategoryData: gdpr_personaldatacategory = await this.personalDataCategorieservice.createPersonalDataCategory(personalDataCategoryData);
 
       res.status(201).json({ data: createPersonalDataCategoryData, message: 'created' });
     } catch (error) {
@@ -41,8 +40,8 @@ class PersonalDataCategoriesController {
   public updatePersonalDataCategory = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
     try {
       const personalDataCategoryId = Number(req.params.id);
-      const personalDataCategoryData: CreatePersonalDataCategoryDto = req.body;
-      const updatePersonalDataCategoryData: PersonalDataCategory = await this.personalDataCategorieservice.updatePersonalDataCategory(personalDataCategoryId, personalDataCategoryData);
+      const personalDataCategoryData: gdpr_personaldatacategory = req.body;
+      const updatePersonalDataCategoryData: gdpr_personaldatacategory = await this.personalDataCategorieservice.updatePersonalDataCategory(personalDataCategoryId, personalDataCategoryData);
 
       res.status(200).json({ data: updatePersonalDataCategoryData, message: 'updated' });
     } catch (error) {
@@ -53,7 +52,7 @@ class PersonalDataCategoriesController {
   public deletePersonalDataCategory = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
     try {
       const personalDataCategoryId = Number(req.params.id);
-      const deletePersonalDataCategoryData: PersonalDataCategory = await this.personalDataCategorieservice.deletePersonalDataCategory(personalDataCategoryId);
+      const deletePersonalDataCategoryData: gdpr_personaldatacategory = await this.personalDataCategorieservice.deletePersonalDataCategory(personalDataCategoryId);
 
       res.status(200).json({ data: deletePersonalDataCategoryData, message: 'deleted' });
     } catch (error) {
