@@ -146,7 +146,7 @@ create index dataTypeName
   on nutricionalcoaching.gdpr_data (dataTypeName);
 
 create index personalDataCategory
-  on nutricionalcoaching.gdpr_data (personalDataCategory);
+  on nutricionalcoaching.gdpr_data (personalDataCategoryID);
 
 create table nutricionalcoaching.gdpr_datarequest
 (
@@ -169,7 +169,7 @@ create index data
   on nutricionalcoaching.gdpr_datarequest (dataID);
 
 create index dataSubject
-  on nutricionalcoaching.gdpr_datarequest (dataSubject);
+  on nutricionalcoaching.gdpr_datarequest (dataSubjectID);
 
 create table nutricionalcoaching.gdpr_datarequestanswer
 (
