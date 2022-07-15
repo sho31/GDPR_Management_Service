@@ -1,24 +1,23 @@
 import { Router } from 'express';
-import AnswersController from '@controllers/answer.controller';
+import TutorController from '@controllers/tutor.controller';
 import { Routes } from '@interfaces/routes.interface';
-import validationMiddleware from '@middlewares/validation.middleware';
 
-class AnswersRoute implements Routes {
-  public path = '/answers';
+class TutorRoute implements Routes {
+  public path = '/tutor';
   public router = Router();
-  public answersController = new AnswersController();
+  public tutorController = new TutorController();
 
   constructor() {
     this.initializeRoutes();
   }
 
   private initializeRoutes() {
-    this.router.get(`${this.path}`, this.answersController.getAnswers);
-    this.router.get(`${this.path}/:id(\\d+)`, this.answersController.getAnswerById);
-    this.router.post(`${this.path}`, this.answersController.createAnswer);
-    this.router.put(`${this.path}/:id(\\d+)`, this.answersController.updateAnswer);
-    this.router.delete(`${this.path}/:id(\\d+)`, this.answersController.deleteAnswer);
+    this.router.get(`${this.path}`, this.tutorController.getTutors);
+    this.router.get(`${this.path}/:id(\\d+)`, this.tutorController.getTutorById);
+    this.router.post(`${this.path}`, this.tutorController.createTutor);
+    this.router.put(`${this.path}/:id(\\d+)`, this.tutorController.updateTutor);
+    this.router.delete(`${this.path}/:id(\\d+)`, this.tutorController.deleteTutor);
   }
 }
 
-export default AnswersRoute;
+export default TutorRoute;

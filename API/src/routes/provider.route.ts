@@ -1,25 +1,24 @@
 import { Router } from 'express';
-import UsersController from '@controllers/users.controller';
-import { CreateUserDto } from '@dtos/users.dto';
+import ProviderController from '@controllers/provider.controller';
 import { Routes } from '@interfaces/routes.interface';
 import validationMiddleware from '@middlewares/validation.middleware';
 
-class UsersRoute implements Routes {
-  public path = '/users';
+class ProviderRoute implements Routes {
+  public path = '/provider';
   public router = Router();
-  public usersController = new UsersController();
+  public providerController = new ProviderController();
 
   constructor() {
     this.initializeRoutes();
   }
 
   private initializeRoutes() {
-    this.router.get(`${this.path}`, this.usersController.getUsers);
-    this.router.get(`${this.path}/:id(\\d+)`, this.usersController.getUserById);
-    this.router.post(`${this.path}`, this.usersController.createUser);
-    this.router.put(`${this.path}/:id(\\d+)`, this.usersController.updateUser);
-    this.router.delete(`${this.path}/:id(\\d+)`, this.usersController.deleteUser);
+    this.router.get(`${this.path}`, this.providerController.getProviders);
+    this.router.get(`${this.path}/:id(\\d+)`, this.providerController.getProviderById);
+    this.router.post(`${this.path}`, this.providerController.createProvider);
+    this.router.put(`${this.path}/:id(\\d+)`, this.providerController.updateProvider);
+    this.router.delete(`${this.path}/:id(\\d+)`, this.providerController.deleteProvider);
   }
 }
 
-export default UsersRoute;
+export default ProviderRoute;

@@ -1,25 +1,24 @@
 import { Router } from 'express';
-import UsersController from '@controllers/users.controller';
-import { CreateUserDto } from '@dtos/users.dto';
+import DataTypeController from '@controllers/dataType.controller';
 import { Routes } from '@interfaces/routes.interface';
 import validationMiddleware from '@middlewares/validation.middleware';
 
-class UsersRoute implements Routes {
-  public path = '/users';
+class DataTypeRoute implements Routes {
+  public path = '/dataType';
   public router = Router();
-  public usersController = new UsersController();
+  public dataTypeController = new DataTypeController();
 
   constructor() {
     this.initializeRoutes();
   }
 
   private initializeRoutes() {
-    this.router.get(`${this.path}`, this.usersController.getUsers);
-    this.router.get(`${this.path}/:id(\\d+)`, this.usersController.getUserById);
-    this.router.post(`${this.path}`, this.usersController.createUser);
-    this.router.put(`${this.path}/:id(\\d+)`, this.usersController.updateUser);
-    this.router.delete(`${this.path}/:id(\\d+)`, this.usersController.deleteUser);
+    this.router.get(`${this.path}`, this.dataTypeController.getDataTypes);
+    this.router.get(`${this.path}/:id(\\d+)`, this.dataTypeController.getDataTypeById);
+    this.router.post(`${this.path}`, this.dataTypeController.createDataType);
+    this.router.put(`${this.path}/:id(\\d+)`, this.dataTypeController.updateDataType);
+    this.router.delete(`${this.path}/:id(\\d+)`, this.dataTypeController.deleteDataType);
   }
 }
 
-export default UsersRoute;
+export default DataTypeRoute;

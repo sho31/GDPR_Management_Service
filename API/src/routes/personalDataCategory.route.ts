@@ -1,25 +1,23 @@
 import { Router } from 'express';
-import UsersController from '@controllers/users.controller';
-import { CreateUserDto } from '@dtos/users.dto';
+import PersonalDataCategoryController from '@controllers/personalDataCategory.controller';
 import { Routes } from '@interfaces/routes.interface';
-import validationMiddleware from '@middlewares/validation.middleware';
 
-class UsersRoute implements Routes {
-  public path = '/users';
+class PersonalDataCategoryRoute implements Routes {
+  public path = '/personalDataCategory';
   public router = Router();
-  public usersController = new UsersController();
+  public personalDataCategoryController = new PersonalDataCategoryController();
 
   constructor() {
     this.initializeRoutes();
   }
 
   private initializeRoutes() {
-    this.router.get(`${this.path}`, this.usersController.getUsers);
-    this.router.get(`${this.path}/:id(\\d+)`, this.usersController.getUserById);
-    this.router.post(`${this.path}`, this.usersController.createUser);
-    this.router.put(`${this.path}/:id(\\d+)`, this.usersController.updateUser);
-    this.router.delete(`${this.path}/:id(\\d+)`, this.usersController.deleteUser);
+    this.router.get(`${this.path}`, this.personalDataCategoryController.getPersonalDataCategories);
+    this.router.get(`${this.path}/:id(\\d+)`, this.personalDataCategoryController.getPersonalDataCategoryById);
+    this.router.post(`${this.path}`, this.personalDataCategoryController.createPersonalDataCategory);
+    this.router.put(`${this.path}/:id(\\d+)`, this.personalDataCategoryController.updatePersonalDataCategory);
+    this.router.delete(`${this.path}/:id(\\d+)`, this.personalDataCategoryController.deletePersonalDataCategory);
   }
 }
 
-export default UsersRoute;
+export default PersonalDataCategoryRoute;

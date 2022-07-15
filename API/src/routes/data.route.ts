@@ -3,22 +3,22 @@ import DataController from '@controllers/data.controller';
 import { Routes } from '@interfaces/routes.interface';
 import validationMiddleware from '@middlewares/validation.middleware';
 
-class DatasRoute implements Routes {
-  public path = '/datas';
+class DataRoute implements Routes {
+  public path = '/data';
   public router = Router();
-  public datasController = new DataController();
+  public dataController = new DataController();
 
   constructor() {
     this.initializeRoutes();
   }
 
   private initializeRoutes() {
-    this.router.get(`${this.path}`, this.datasController.getDatas);
-    this.router.get(`${this.path}/:id(\\d+)`, this.datasController.getDataById);
-    this.router.post(`${this.path}`, this.datasController.createData);
-    this.router.put(`${this.path}/:id(\\d+)`, this.datasController.updateData);
-    this.router.delete(`${this.path}/:id(\\d+)`, this.datasController.deleteData);
+    this.router.get(`${this.path}`, this.dataController.getDatas);
+    this.router.get(`${this.path}/:id(\\d+)`, this.dataController.getDataById);
+    this.router.post(`${this.path}`, this.dataController.createData);
+    this.router.put(`${this.path}/:id(\\d+)`, this.dataController.updateData);
+    this.router.delete(`${this.path}/:id(\\d+)`, this.dataController.deleteData);
   }
 }
 
-export default DatasRoute;
+export default DataRoute;
