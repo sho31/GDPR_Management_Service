@@ -1,6 +1,9 @@
 {
   "name": "backend",
   "version": "0.0.0",
+  "engines": {
+    "node": "16.14.2"
+  },
   "description": "TypeScript + Prisma + MySQL + Express API Server",
   "author": "",
   "license": "ISC",
