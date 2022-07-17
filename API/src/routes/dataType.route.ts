@@ -1,7 +1,6 @@
 import { Router } from 'express';
 import DataTypeController from '@controllers/dataType.controller';
 import { Routes } from '@interfaces/routes.interface';
-import validationMiddleware from '@middlewares/validation.middleware';
 
 class DataTypeRoute implements Routes {
   public path = '/dataType';
@@ -13,11 +12,11 @@ class DataTypeRoute implements Routes {
   }
 
   private initializeRoutes() {
-    this.router.get(`${this.path}`, this.dataTypeController.getDataTypes);
-    this.router.get(`${this.path}/:id(\\d+)`, this.dataTypeController.getDataTypeById);
-    this.router.post(`${this.path}`, this.dataTypeController.createDataType);
-    this.router.put(`${this.path}/:id(\\d+)`, this.dataTypeController.updateDataType);
-    this.router.delete(`${this.path}/:id(\\d+)`, this.dataTypeController.deleteDataType);
+    this.router.get(`${this.path}/getAll`, this.dataTypeController.getDataTypes);
+    this.router.get(`${this.path}/getById/:id(\\d+)`, this.dataTypeController.getDataTypeById);
+    this.router.post(`${this.path}/create`, this.dataTypeController.createDataType);
+    this.router.put(`${this.path}/update/:id(\\d+)`, this.dataTypeController.updateDataType);
+    this.router.delete(`${this.path}/delete/:id(\\d+)`, this.dataTypeController.deleteDataType);
   }
 }
 

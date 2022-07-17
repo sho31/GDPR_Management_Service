@@ -12,11 +12,11 @@ class PersonalDataCategoryRoute implements Routes {
   }
 
   private initializeRoutes() {
-    this.router.get(`${this.path}`, this.personalDataCategoryController.getPersonalDataCategories);
-    this.router.get(`${this.path}/:id(\\d+)`, this.personalDataCategoryController.getPersonalDataCategoryById);
-    this.router.post(`${this.path}`, this.personalDataCategoryController.createPersonalDataCategory);
-    this.router.put(`${this.path}/:id(\\d+)`, this.personalDataCategoryController.updatePersonalDataCategory);
-    this.router.delete(`${this.path}/:id(\\d+)`, this.personalDataCategoryController.deletePersonalDataCategory);
+    this.router.get(`${this.path}/getAll`, this.personalDataCategoryController.getPersonalDataCategories);
+    this.router.get(`${this.path}/getById/:id(\\d+)`, this.personalDataCategoryController.getPersonalDataCategoryById);
+    this.router.post(`${this.path}/create`, this.personalDataCategoryController.createPersonalDataCategory);
+    this.router.put(`${this.path}/update/:id(\\d+)`, this.personalDataCategoryController.updatePersonalDataCategory);
+    this.router.delete(`${this.path}/delete/:id(\\d+)`, this.personalDataCategoryController.deletePersonalDataCategory);
   }
 }
 

@@ -13,11 +13,11 @@ class AnswersRoute implements Routes {
   }
 
   private initializeRoutes() {
-    this.router.get(`${this.path}`, this.answersController.getAnswers);
-    this.router.get(`${this.path}/:id(\\d+)`, this.answersController.getAnswerById);
-    this.router.post(`${this.path}`, this.answersController.createAnswer);
-    this.router.put(`${this.path}/:id(\\d+)`, this.answersController.updateAnswer);
-    this.router.delete(`${this.path}/:id(\\d+)`, this.answersController.deleteAnswer);
+    this.router.get(`${this.path}/getAll`, this.answersController.getAnswers);
+    this.router.get(`${this.path}/getById/:id(\\d+)`, this.answersController.getAnswerById);
+    this.router.post(`${this.path}/create`, this.answersController.createAnswer);
+    this.router.put(`${this.path}/update/:id(\\d+)`, this.answersController.updateAnswer);
+    this.router.delete(`${this.path}/delete/:id(\\d+)`, this.answersController.deleteAnswer);
   }
 }
 

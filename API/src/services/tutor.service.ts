@@ -1,45 +1,45 @@
-import {gdpr_datarequestanswer, PrismaClient} from '@prisma/client';
-import {HttpException} from '@exceptions/HttpException';
-import {isEmpty} from '@utils/util';
+import { gdpr_tutor, PrismaClient } from '@prisma/client';
+import { HttpException } from '@exceptions/HttpException';
+import { isEmpty } from '@utils/util';
 
-class AnswerService {
-  public answers = new PrismaClient().gdpr_datarequestanswer;
+class TutorService {
+  public tutors = new PrismaClient().gdpr_tutor;
 
-  public async findAllAnswer(): Promise<gdpr_datarequestanswer[]> {
-    return await this.answers.findMany();
+  public async findAllTutor(): Promise<gdpr_tutor[]> {
+    return await this.tutors.findMany();
   }
 
-  public async findAnswerById(dataRequestAnswerid: number): Promise<gdpr_datarequestanswer> {
-    if (isEmpty(dataRequestAnswerid)) throw new HttpException(400, "There is no dataRequestAnswerid");
+  public async findTutorById(tutorID: number): Promise<gdpr_tutor> {
+    if (isEmpty(tutorID)) throw new HttpException(400, 'There is no tutorID');
 
-    const findAnswer: gdpr_datarequestanswer = await this.answers.findUnique({ where: { dataRequestAnswerid: dataRequestAnswerid } });
-    if (!findAnswer) throw new HttpException(409, "There is no answer");
+    const findTutor: gdpr_tutor = await this.tutors.findUnique({ where: { tutorID: tutorID } });
+    if (!findTutor) throw new HttpException(409, 'There is no tutor');
 
-    return findAnswer;
+    return findTutor;
   }
 
-  public async createAnswer(answerData: gdpr_datarequestanswer): Promise<gdpr_datarequestanswer> {
-    if (isEmpty(answerData)) throw new HttpException(400, "There is no answerData");
-    return await this.answers.create({data: {...answerData}});
+  public async createTutor(tutorData: gdpr_tutor): Promise<gdpr_tutor> {
+    if (isEmpty(tutorData)) throw new HttpException(400, 'There is no tutorData');
+    return await this.tutors.create({ data: { ...tutorData } });
   }
 
-  public async updateAnswer(dataRequestAnswerid: number, answerData: gdpr_datarequestanswer): Promise<gdpr_datarequestanswer> {
-    if (isEmpty(answerData)) throw new HttpException(400, "There is no answerData");
+  public async updateTutor(tutorID: number, tutorData: gdpr_tutor): Promise<gdpr_tutor> {
+    if (isEmpty(tutorData)) throw new HttpException(400, 'There is no tutorData');
 
-    const findAnswer: gdpr_datarequestanswer = await this.answers.findUnique({ where: { dataRequestAnswerid: dataRequestAnswerid } });
-    if (!findAnswer) throw new HttpException(409, "There is no answer");
+    const findTutor: gdpr_tutor = await this.tutors.findUnique({ where: { tutorID: tutorID } });
+    if (!findTutor) throw new HttpException(409, 'There is no tutor');
 
-    return await this.answers.update({where: {dataRequestAnswerid: dataRequestAnswerid}, data: {...answerData}});
+    return await this.tutors.update({ where: { tutorID: tutorID }, data: { ...tutorData } });
   }
 
-  public async deleteAnswer(dataRequestAnswerid: number): Promise<gdpr_datarequestanswer> {
-    if (isEmpty(dataRequestAnswerid)) throw new HttpException(400, "There is no dataRequestAnswerid");
+  public async deleteTutor(tutorID: number): Promise<gdpr_tutor> {
+    if (isEmpty(tutorID)) throw new HttpException(400, 'There is no tutorID');
 
-    const findAnswer: gdpr_datarequestanswer = await this.answers.findUnique({ where: { dataRequestAnswerid: dataRequestAnswerid } });
-    if (!findAnswer) throw new HttpException(409, "There is no answer");
+    const findTutor: gdpr_tutor = await this.tutors.findUnique({ where: { tutorID: tutorID } });
+    if (!findTutor) throw new HttpException(409, 'There is no tutor');
 
-    return await this.answers.delete({where: {dataRequestAnswerid: dataRequestAnswerid}});
+    return await this.tutors.delete({ where: { tutorID: tutorID } });
   }
 }
 
-export default AnswerService;
+export default TutorService;

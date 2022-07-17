@@ -5,7 +5,7 @@ import dataService from '@services/data.service';
 class DataController {
   public dataService = new dataService();
 
-  public getDatas = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
+  public getData = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
     try {
       const findAllDatasData: gdpr_data[] = await this.dataService.findAllData();
 

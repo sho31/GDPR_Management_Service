@@ -12,11 +12,11 @@ class TutorRoute implements Routes {
   }
 
   private initializeRoutes() {
-    this.router.get(`${this.path}`, this.tutorController.getTutors);
-    this.router.get(`${this.path}/:id(\\d+)`, this.tutorController.getTutorById);
-    this.router.post(`${this.path}`, this.tutorController.createTutor);
-    this.router.put(`${this.path}/:id(\\d+)`, this.tutorController.updateTutor);
-    this.router.delete(`${this.path}/:id(\\d+)`, this.tutorController.deleteTutor);
+    this.router.get(`${this.path}/getAll`, this.tutorController.getTutors);
+    this.router.get(`${this.path}/getById/:id(\\d+)`, this.tutorController.getTutorById);
+    this.router.post(`${this.path}/create`, this.tutorController.createTutor);
+    this.router.put(`${this.path}/update/:id(\\d+)`, this.tutorController.updateTutor);
+    this.router.delete(`${this.path}/delete/:id(\\d+)`, this.tutorController.deleteTutor);
   }
 }
 

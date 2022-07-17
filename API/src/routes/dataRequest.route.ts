@@ -13,11 +13,11 @@ class DataRequestsRoute implements Routes {
   }
 
   private initializeRoutes() {
-    this.router.get(`${this.path}`, this.dataRequestsController.getDataRequests);
-    this.router.get(`${this.path}/:id(\\d+)`, this.dataRequestsController.getDataRequestById);
-    this.router.post(`${this.path}`, this.dataRequestsController.createDataRequest);
-    this.router.put(`${this.path}/:id(\\d+)`, this.dataRequestsController.updateDataRequest);
-    this.router.delete(`${this.path}/:id(\\d+)`, this.dataRequestsController.deleteDataRequest);
+    this.router.get(`${this.path}/getAll`, this.dataRequestsController.getDataRequests);
+    this.router.get(`${this.path}/getById/:id(\\d+)`, this.dataRequestsController.getDataRequestById);
+    this.router.post(`${this.path}/create`, this.dataRequestsController.createDataRequest);
+    this.router.put(`${this.path}/update/:id(\\d+)`, this.dataRequestsController.updateDataRequest);
+    this.router.delete(`${this.path}/delete/:id(\\d+)`, this.dataRequestsController.deleteDataRequest);
   }
 }
 

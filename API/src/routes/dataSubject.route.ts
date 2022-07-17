@@ -13,11 +13,11 @@ class DataSubjectsRoute implements Routes {
   }
 
   private initializeRoutes() {
-    this.router.get(`${this.path}`, this.dataSubjectController.getDataSubjects);
-    this.router.get(`${this.path}/:id(\\d+)`, this.dataSubjectController.getDataSubjectById);
-    this.router.post(`${this.path}`, this.dataSubjectController.createDataSubject);
-    this.router.put(`${this.path}/:id(\\d+)`, this.dataSubjectController.updateDataSubject);
-    this.router.delete(`${this.path}/:id(\\d+)`, this.dataSubjectController.deleteDataSubject);
+    this.router.get(`${this.path}/getAll`, this.dataSubjectController.getDataSubjects);
+    this.router.get(`${this.path}/getById/:id(\\d+)`, this.dataSubjectController.getDataSubjectById);
+    this.router.post(`${this.path}/create`, this.dataSubjectController.createDataSubject);
+    this.router.put(`${this.path}/update/:id(\\d+)`, this.dataSubjectController.updateDataSubject);
+    this.router.delete(`${this.path}/delete/:id(\\d+)`, this.dataSubjectController.deleteDataSubject);
   }
 }
 
