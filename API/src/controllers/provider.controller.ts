@@ -17,7 +17,7 @@ class ProvidersController {
 
   public getProviderById = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
     try {
-      const providerId = Number(req.params.id);
+      const providerId = Number(req.params.providerID);
       const findOneProviderData: gdpr_provider = await this.providerService.findProviderByID(providerId);
 
       res.status(200).json({ data: findOneProviderData, message: 'findOne' });
@@ -39,7 +39,7 @@ class ProvidersController {
 
   public updateProvider = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
     try {
-      const providerId = Number(req.params.id);
+      const providerId = Number(req.params.providerID);
       const providerData: gdpr_provider = req.body;
       const updateProviderData: gdpr_provider = await this.providerService.updateProvider(providerId, providerData);
 
@@ -51,7 +51,7 @@ class ProvidersController {
 
   public deleteProvider = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
     try {
-      const providerId = Number(req.params.id);
+      const providerId = Number(req.params.providerID);
       const deleteProviderData: gdpr_provider = await this.providerService.deleteProvider(providerId);
 
       res.status(200).json({ data: deleteProviderData, message: 'deleted' });

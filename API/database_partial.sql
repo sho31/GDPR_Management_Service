@@ -133,7 +133,7 @@ create index dataSubject
 
 create table gdpr_datarequestanswer
 (
-  dataRequestAnswerid int auto_increment
+  dataRequestAnswerId int auto_increment
     primary key,
   answer              tinyint(1)           null,
   justification       varchar(150)         null,

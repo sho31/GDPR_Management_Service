@@ -17,7 +17,7 @@ class AnswersController {
 
   public getAnswerById = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
     try {
-      const answerId = Number(req.params.id);
+      const answerId = Number(req.params.dataRequestAnswerId);
       const findOneAnswerData: gdpr_datarequestanswer = await this.answerService.findAnswerById(answerId);
 
       res.status(200).json({ data: findOneAnswerData, message: 'findOne' });
@@ -39,7 +39,7 @@ class AnswersController {
 
   public updateAnswer = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
     try {
-      const answerId = Number(req.params.id);
+      const answerId = Number(req.params.dataRequestAnswerId);
       const answerData: gdpr_datarequestanswer = req.body;
       const updateAnswerData: gdpr_datarequestanswer = await this.answerService.updateAnswer(answerId, answerData);
 
@@ -51,7 +51,7 @@ class AnswersController {
 
   public deleteAnswer = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
     try {
-      const answerId = Number(req.params.id);
+      const answerId = Number(req.params.dataRequestAnswerId);
       const deleteAnswerData: gdpr_datarequestanswer = await this.answerService.deleteAnswer(answerId);
 
       res.status(200).json({ data: deleteAnswerData, message: 'deleted' });

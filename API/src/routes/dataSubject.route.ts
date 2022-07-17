@@ -4,7 +4,7 @@ import { Routes } from '@interfaces/routes.interface';
 import validationMiddleware from '@middlewares/validation.middleware';
 
 class DataSubjectsRoute implements Routes {
-  public path = '/dataSubjects';
+  public path = '/dataSubject';
   public router = Router();
   public dataSubjectController = new DataSubjectController();
 
@@ -14,9 +14,9 @@ class DataSubjectsRoute implements Routes {
 
   private initializeRoutes() {
     this.router.get(`${this.path}/getAll`, this.dataSubjectController.getDataSubjects);
-    this.router.get(`${this.path}/getById/:id(\\d+)`, this.dataSubjectController.getDataSubjectById);
+    this.router.get(`${this.path}/getById/:dataSubjectID(\\d+)`, this.dataSubjectController.getDataSubjectById);
     this.router.post(`${this.path}/create`, this.dataSubjectController.createDataSubject);
-    this.router.put(`${this.path}/update/:id(\\d+)`, this.dataSubjectController.updateDataSubject);
+    this.router.put(`${this.path}/update/:dataSubjectID(\\d+)`, this.dataSubjectController.updateDataSubject);
     this.router.delete(`${this.path}/delete/:id(\\d+)`, this.dataSubjectController.deleteDataSubject);
   }
 }

@@ -17,7 +17,7 @@ class DataRequestsController {
 
   public getDataRequestById = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
     try {
-      const dataRequestId = Number(req.params.id);
+      const dataRequestId = Number(req.params.DataRequestID);
       const findOneDataRequestData: gdpr_datarequest = await this.dataRequestService.findDataRequestById(dataRequestId);
 
       res.status(200).json({ data: findOneDataRequestData, message: 'findOne' });
@@ -39,7 +39,7 @@ class DataRequestsController {
 
   public updateDataRequest = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
     try {
-      const dataRequestId = Number(req.params.id);
+      const dataRequestId = Number(req.params.DataRequestID);
       const dataRequestData: gdpr_datarequest = req.body;
       const updateDataRequestData: gdpr_datarequest = await this.dataRequestService.updateDataRequest(dataRequestId, dataRequestData);
 
@@ -51,7 +51,7 @@ class DataRequestsController {
 
   public deleteDataRequest = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
     try {
-      const dataRequestId = Number(req.params.id);
+      const dataRequestId = Number(req.params.DataRequestID);
       const deleteDataRequestData: gdpr_datarequest = await this.dataRequestService.deleteDataRequest(dataRequestId);
 
       res.status(200).json({ data: deleteDataRequestData, message: 'deleted' });

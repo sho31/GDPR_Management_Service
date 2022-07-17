@@ -17,7 +17,7 @@ class DataSubjectCategoriesController {
 
   public getDataSubjectCategoryById = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
     try {
-      const dsCategory = req.params.dsCategory;
+      const dsCategory = req.params.dsCategoryID;
       const findOneDataSubjectCategoryData: gdpr_datasubjectcategory = await this.dataSubjectCategoryService.findDataSubjectCategoryById(dsCategory);
 
       res.status(200).json({ data: findOneDataSubjectCategoryData, message: 'findOne' });
@@ -29,7 +29,9 @@ class DataSubjectCategoriesController {
   public createDataSubjectCategory = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
     try {
       const dataSubjectCategoryData: gdpr_datasubjectcategory = req.body;
-      const createDataSubjectCategoryData: gdpr_datasubjectcategory = await this.dataSubjectCategoryService.createDataSubjectCategory(dataSubjectCategoryData);
+      const createDataSubjectCategoryData: gdpr_datasubjectcategory = await this.dataSubjectCategoryService.createDataSubjectCategory(
+        dataSubjectCategoryData,
+      );
 
       res.status(201).json({ data: createDataSubjectCategoryData, message: 'created' });
     } catch (error) {
@@ -37,10 +39,9 @@ class DataSubjectCategoriesController {
     }
   };
 
-
   public deleteDataSubjectCategory = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
     try {
-      const dsCategory = req.params.dsCategory;
+      const dsCategory = req.params.dsCategoryID;
       const deleteDataSubjectCategoryData: gdpr_datasubjectcategory = await this.dataSubjectCategoryService.deleteDataSubjectCategory(dsCategory);
 
       res.status(200).json({ data: deleteDataSubjectCategoryData, message: 'deleted' });

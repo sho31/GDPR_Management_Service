@@ -17,7 +17,7 @@ class DataTypesController {
 
   public getDataTypeById = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
     try {
-      const dataTypeId = Number(req.params.id);
+      const dataTypeId = Number(req.params.dataTypeID);
       const findOneDataTypeData: gdpr_datatype = await this.dataTypeService.findDataTypeById(dataTypeId);
 
       res.status(200).json({ data: findOneDataTypeData, message: 'findOne' });
@@ -39,7 +39,7 @@ class DataTypesController {
 
   public updateDataType = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
     try {
-      const dataTypeId = Number(req.params.id);
+      const dataTypeId = Number(req.params.dataTypeID);
       const dataTypeData: gdpr_datatype = req.body;
       const updateDataTypeData: gdpr_datatype = await this.dataTypeService.updateDataType(dataTypeId, dataTypeData);
 
@@ -51,7 +51,7 @@ class DataTypesController {
 
   public deleteDataType = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
     try {
-      const dataTypeId = Number(req.params.id);
+      const dataTypeId = Number(req.params.dataTypeID);
       const deleteDataTypeData: gdpr_datatype = await this.dataTypeService.deleteDataType(dataTypeId);
 
       res.status(200).json({ data: deleteDataTypeData, message: 'deleted' });

@@ -17,7 +17,7 @@ class TutorsController {
 
   public getTutorById = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
     try {
-      const tutorId = Number(req.params.id);
+      const tutorId = Number(req.params.tutorID);
       const findOneTutorData: gdpr_tutor = await this.tutorService.findTutorById(tutorId);
 
       res.status(200).json({ data: findOneTutorData, message: 'findOne' });
@@ -39,7 +39,7 @@ class TutorsController {
 
   public updateTutor = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
     try {
-      const tutorId = Number(req.params.id);
+      const tutorId = Number(req.params.tutorID);
       const tutorData: gdpr_tutor = req.body;
       const updateTutorData: gdpr_tutor = await this.tutorService.updateTutor(tutorId, tutorData);
 
@@ -51,7 +51,7 @@ class TutorsController {
 
   public deleteTutor = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
     try {
-      const tutorId = Number(req.params.id);
+      const tutorId = Number(req.params.tutorID);
       const deleteTutorData: gdpr_tutor = await this.tutorService.deleteTutor(tutorId);
 
       res.status(200).json({ data: deleteTutorData, message: 'deleted' });

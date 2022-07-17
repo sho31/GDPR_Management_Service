@@ -13,10 +13,10 @@ class DataRoute implements Routes {
 
   private initializeRoutes() {
     this.router.get(`${this.path}/getAll`, this.dataController.getData);
-    this.router.get(`${this.path}/getById/:id(\\d+)`, this.dataController.getDataById);
+    this.router.get(`${this.path}/getById/:dataID(\\d+)`, this.dataController.getDataById);
     this.router.post(`${this.path}/create`, this.dataController.createData);
-    this.router.put(`${this.path}/update/:id(\\d+)`, this.dataController.updateData);
-    this.router.delete(`${this.path}/delete/:id(\\d+)`, this.dataController.deleteData);
+    this.router.put(`${this.path}/update/:dataID(\\d+)`, this.dataController.updateData);
+    this.router.delete(`${this.path}/delete/:dataID(\\d+)`, this.dataController.deleteData);
   }
 }
 

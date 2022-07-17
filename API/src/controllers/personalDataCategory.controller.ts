@@ -17,8 +17,10 @@ class PersonalDataCategoriesController {
 
   public getPersonalDataCategoryById = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
     try {
-      const personalDataCategoryId = Number(req.params.id);
-      const findOnePersonalDataCategoryData: gdpr_personaldatacategory = await this.personalDataCategorieservice.findPersonalDataCategoryById(personalDataCategoryId);
+      const personalDataCategoryId = Number(req.params.PDCategoryID);
+      const findOnePersonalDataCategoryData: gdpr_personaldatacategory = await this.personalDataCategorieservice.findPersonalDataCategoryById(
+        personalDataCategoryId,
+      );
 
       res.status(200).json({ data: findOnePersonalDataCategoryData, message: 'findOne' });
     } catch (error) {
@@ -29,7 +31,9 @@ class PersonalDataCategoriesController {
   public createPersonalDataCategory = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
     try {
       const personalDataCategoryData: gdpr_personaldatacategory = req.body;
-      const createPersonalDataCategoryData: gdpr_personaldatacategory = await this.personalDataCategorieservice.createPersonalDataCategory(personalDataCategoryData);
+      const createPersonalDataCategoryData: gdpr_personaldatacategory = await this.personalDataCategorieservice.createPersonalDataCategory(
+        personalDataCategoryData,
+      );
 
       res.status(201).json({ data: createPersonalDataCategoryData, message: 'created' });
     } catch (error) {
@@ -39,9 +43,12 @@ class PersonalDataCategoriesController {
 
   public updatePersonalDataCategory = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
     try {
-      const personalDataCategoryId = Number(req.params.id);
+      const personalDataCategoryId = Number(req.params.PDCategoryID);
       const personalDataCategoryData: gdpr_personaldatacategory = req.body;
-      const updatePersonalDataCategoryData: gdpr_personaldatacategory = await this.personalDataCategorieservice.updatePersonalDataCategory(personalDataCategoryId, personalDataCategoryData);
+      const updatePersonalDataCategoryData: gdpr_personaldatacategory = await this.personalDataCategorieservice.updatePersonalDataCategory(
+        personalDataCategoryId,
+        personalDataCategoryData,
+      );
 
       res.status(200).json({ data: updatePersonalDataCategoryData, message: 'updated' });
     } catch (error) {
@@ -51,8 +58,10 @@ class PersonalDataCategoriesController {
 
   public deletePersonalDataCategory = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
     try {
-      const personalDataCategoryId = Number(req.params.id);
-      const deletePersonalDataCategoryData: gdpr_personaldatacategory = await this.personalDataCategorieservice.deletePersonalDataCategory(personalDataCategoryId);
+      const personalDataCategoryId = Number(req.params.PDCategoryID);
+      const deletePersonalDataCategoryData: gdpr_personaldatacategory = await this.personalDataCategorieservice.deletePersonalDataCategory(
+        personalDataCategoryId,
+      );
 
       res.status(200).json({ data: deletePersonalDataCategoryData, message: 'deleted' });
     } catch (error) {

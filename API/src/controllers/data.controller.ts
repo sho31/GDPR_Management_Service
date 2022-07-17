@@ -17,7 +17,7 @@ class DataController {
 
   public getDataById = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
     try {
-      const dataId = Number(req.params.id);
+      const dataId = Number(req.params.dataID);
       const findOneDataData: gdpr_data = await this.dataService.findDataById(dataId);
 
       res.status(200).json({ data: findOneDataData, message: 'findOne' });
@@ -39,7 +39,7 @@ class DataController {
 
   public updateData = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
     try {
-      const dataId = Number(req.params.id);
+      const dataId = Number(req.params.dataID);
       const dataData: gdpr_data = req.body;
       const updateDataData: gdpr_data = await this.dataService.updateData(dataId, dataData);
 
@@ -51,7 +51,7 @@ class DataController {
 
   public deleteData = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
     try {
-      const dataId = Number(req.params.id);
+      const dataId = Number(req.params.dataID);
       const deleteDataData: gdpr_data = await this.dataService.deleteData(dataId);
 
       res.status(200).json({ data: deleteDataData, message: 'deleted' });

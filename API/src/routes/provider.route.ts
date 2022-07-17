@@ -13,10 +13,10 @@ class ProviderRoute implements Routes {
 
   private initializeRoutes() {
     this.router.get(`${this.path}/getAll`, this.providerController.getProviders);
-    this.router.get(`${this.path}/getById/:id(\\d+)`, this.providerController.getProviderById);
+    this.router.get(`${this.path}/getById/:providerID(\\d+)`, this.providerController.getProviderById);
     this.router.post(`${this.path}/create`, this.providerController.createProvider);
-    this.router.put(`${this.path}/update/:id(\\d+)`, this.providerController.updateProvider);
-    this.router.delete(`${this.path}/delete/:id(\\d+)`, this.providerController.deleteProvider);
+    this.router.put(`${this.path}/update/:providerID(\\d+)`, this.providerController.updateProvider);
+    this.router.delete(`${this.path}/delete/:providerID(\\d+)`, this.providerController.deleteProvider);
   }
 }
 
