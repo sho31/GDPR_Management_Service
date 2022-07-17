@@ -4,6 +4,14 @@
   "engines": {
     "node": "16.14.2"
   },
+  "production": {
+    "use_env_variable": "DATABASE_URL",
+    "dialect": "mysql",
+    "dialectOptions": {
+      "ssl": true
+    }
+  },
+
   "description": "TypeScript + Prisma + MySQL + Express API Server",
   "author": "",
   "license": "ISC",
