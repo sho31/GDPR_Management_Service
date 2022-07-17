@@ -37,7 +37,9 @@
     "jsonwebtoken": "^8.5.1",
     "morgan": "^1.10.0",
     "winston": "^3.3.3",
-    "winston-daily-rotate-file": "^4.5.5"
+    "winston-daily-rotate-file": "^4.5.5",
+    "@swc/cli": "^0.1.51",
+    "@swc/core": "^1.2.108"
   },
   "devDependencies": {
     "@swc/cli": "^0.1.51",
