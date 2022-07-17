@@ -13,9 +13,9 @@ class DataSubjectCategoryRoute implements Routes {
 
   private initializeRoutes() {
     this.router.get(`${this.path}/getAll`, this.DataSubjectCategoryController.getAllDataSubjectCategory);
-    this.router.get(`${this.path}/getById/:dsCategory`, this.DataSubjectCategoryController.getDataSubjectCategoryById);
+    this.router.get(`${this.path}/getById/:dsCategoryID`, this.DataSubjectCategoryController.getDataSubjectCategoryById);
     this.router.post(`${this.path}/create`, this.DataSubjectCategoryController.createDataSubjectCategory); //TODO : Validation middleware
-    this.router.delete(`${this.path}/delete/:dsCategory`, this.DataSubjectCategoryController.deleteDataSubjectCategory);
+    this.router.delete(`${this.path}/delete/:dsCategoryID`, this.DataSubjectCategoryController.deleteDataSubjectCategory);
   }
 }
 
