@@ -5,7 +5,8 @@ import winstonDaily from 'winston-daily-rotate-file';
 import { LOG_DIR } from '@config';
 
 // logs dir
-const logDir: string = join(dirname(require.main.filename), LOG_DIR);
+//const logDir: string = join(dirname(require.main.filename), LOG_DIR);
+const logDir = './logs';
 console.log(logDir);
 if (!existsSync(logDir)) {
   mkdirSync(logDir);
