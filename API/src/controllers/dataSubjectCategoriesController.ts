@@ -17,8 +17,10 @@ class DataSubjectCategoriesController {
 
   public getDataSubjectCategoryById = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
     try {
-      const dsCategory = req.params.dsCategoryID;
-      const findOneDataSubjectCategoryData: gdpr_datasubjectcategory = await this.dataSubjectCategoryService.findDataSubjectCategoryById(dsCategory);
+      const dsCategoryID = parseInt(req.params.dsCategoryID);
+      const findOneDataSubjectCategoryData: gdpr_datasubjectcategory = await this.dataSubjectCategoryService.findDataSubjectCategoryById(
+        dsCategoryID,
+      );
 
       res.status(200).json({ data: findOneDataSubjectCategoryData, message: 'findOne' });
     } catch (error) {
@@ -41,8 +43,8 @@ class DataSubjectCategoriesController {
 
   public deleteDataSubjectCategory = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
     try {
-      const dsCategory = req.params.dsCategoryID;
-      const deleteDataSubjectCategoryData: gdpr_datasubjectcategory = await this.dataSubjectCategoryService.deleteDataSubjectCategory(dsCategory);
+      const dsCategoryID = parseInt(req.params.dsCategoryID);
+      const deleteDataSubjectCategoryData: gdpr_datasubjectcategory = await this.dataSubjectCategoryService.deleteDataSubjectCategory(dsCategoryID);
 
       res.status(200).json({ data: deleteDataSubjectCategoryData, message: 'deleted' });
     } catch (error) {

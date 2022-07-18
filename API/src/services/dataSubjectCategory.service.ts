@@ -31,8 +31,7 @@ class DataSubjectCategoryService {
     const findDataSubjectCategory: gdpr_datasubjectcategory = await this.datasubjectcategories.findUnique({ where: { dsCategoryID: dsCategoryID } });
     if (!findDataSubjectCategory) throw new HttpException(409, 'There is no dataSubjectCategory with this name');
     //TODO : check if there is any dataSubject with this dsCategoryID
-    const deleteDataSubjectCategoryData = await this.datasubjectcategories.delete({ where: { dsCategoryID: dsCategoryID } });
-    return deleteDataSubjectCategoryData;
+    return await this.datasubjectcategories.delete({ where: { dsCategoryID: dsCategoryID } });
   }
 }
 

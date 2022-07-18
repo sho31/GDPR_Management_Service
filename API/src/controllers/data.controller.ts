@@ -7,9 +7,9 @@ class DataController {
 
   public getData = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
     try {
-      const findAllDatasData: gdpr_data[] = await this.dataService.findAllData();
+      const findAllData: gdpr_data[] = await this.dataService.findAllData();
 
-      res.status(200).json({ data: findAllDatasData, message: 'findAll' });
+      res.status(200).json({ data: findAllData, message: 'findAll' });
     } catch (error) {
       next(error);
     }
@@ -28,8 +28,8 @@ class DataController {
 
   public createData = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
     try {
-      const dataData: gdpr_data = req.body;
-      const createDataData: gdpr_data = await this.dataService.createData(dataData);
+      const data: gdpr_data = req.body;
+      const createDataData: gdpr_data = await this.dataService.createData(data);
 
       res.status(201).json({ data: createDataData, message: 'created' });
     } catch (error) {
@@ -40,8 +40,8 @@ class DataController {
   public updateData = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
     try {
       const dataId = Number(req.params.dataID);
-      const dataData: gdpr_data = req.body;
-      const updateDataData: gdpr_data = await this.dataService.updateData(dataId, dataData);
+      const data: gdpr_data = req.body;
+      const updateDataData: gdpr_data = await this.dataService.updateData(dataId, data);
 
       res.status(200).json({ data: updateDataData, message: 'updated' });
     } catch (error) {

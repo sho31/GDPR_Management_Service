@@ -9,10 +9,10 @@ class AnswerService {
     return await this.answers.findMany();
   }
 
-  public async findAnswerById(dataRequestAnswerid: number): Promise<gdpr_datarequestanswer> {
-    if (isEmpty(dataRequestAnswerid)) throw new HttpException(400, 'There is no dataRequestAnswerid');
+  public async findAnswerById(dataRequestAnswerId: number): Promise<gdpr_datarequestanswer> {
+    if (isEmpty(dataRequestAnswerId)) throw new HttpException(400, 'There is no dataRequestAnswerId');
 
-    const findAnswer: gdpr_datarequestanswer = await this.answers.findUnique({ where: { dataRequestAnswerid: dataRequestAnswerid } });
+    const findAnswer: gdpr_datarequestanswer = await this.answers.findUnique({ where: { dataRequestAnswerId: dataRequestAnswerId } });
     if (!findAnswer) throw new HttpException(409, 'There is no answer');
 
     return findAnswer;
@@ -23,22 +23,22 @@ class AnswerService {
     return await this.answers.create({ data: { ...answerData } });
   }
 
-  public async updateAnswer(dataRequestAnswerid: number, answerData: gdpr_datarequestanswer): Promise<gdpr_datarequestanswer> {
+  public async updateAnswer(dataRequestAnswerId: number, answerData: gdpr_datarequestanswer): Promise<gdpr_datarequestanswer> {
     if (isEmpty(answerData)) throw new HttpException(400, 'There is no answerData');
 
-    const findAnswer: gdpr_datarequestanswer = await this.answers.findUnique({ where: { dataRequestAnswerid: dataRequestAnswerid } });
-    if (!findAnswer) throw new HttpException(409, 'There is no answer');
+    const findAnswer: gdpr_datarequestanswer = await this.answers.findUnique({ where: { dataRequestAnswerId: dataRequestAnswerId } });
+    if (!findAnswer) throw new HttpException(409, 'There is no answer wigth this id ' + dataRequestAnswerId);
 
-    return await this.answers.update({ where: { dataRequestAnswerid: dataRequestAnswerid }, data: { ...answerData } });
+    return await this.answers.update({ where: { dataRequestAnswerId: dataRequestAnswerId }, data: { ...answerData } });
   }
 
-  public async deleteAnswer(dataRequestAnswerid: number): Promise<gdpr_datarequestanswer> {
-    if (isEmpty(dataRequestAnswerid)) throw new HttpException(400, 'There is no dataRequestAnswerid');
+  public async deleteAnswer(dataRequestAnswerId: number): Promise<gdpr_datarequestanswer> {
+    if (isEmpty(dataRequestAnswerId)) throw new HttpException(400, 'There is no dataRequestAnswerId');
 
-    const findAnswer: gdpr_datarequestanswer = await this.answers.findUnique({ where: { dataRequestAnswerid: dataRequestAnswerid } });
+    const findAnswer: gdpr_datarequestanswer = await this.answers.findUnique({ where: { dataRequestAnswerId: dataRequestAnswerId } });
     if (!findAnswer) throw new HttpException(409, 'There is no answer');
 
-    return await this.answers.delete({ where: { dataRequestAnswerid: dataRequestAnswerid } });
+    return await this.answers.delete({ where: { dataRequestAnswerId: dataRequestAnswerId } });
   }
 }
 
