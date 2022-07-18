@@ -6,7 +6,7 @@ import { LOG_DIR } from '@config';
 
 // logs dir
 const logDir: string = join(dirname(require.main.filename), LOG_DIR);
-
+console.log(logDir);
 if (!existsSync(logDir)) {
   mkdirSync(logDir);
 }
