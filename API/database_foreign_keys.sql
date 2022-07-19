@@ -12,10 +12,6 @@ alter table gdpr_data
 
 
 alter table gdpr_datarequest
-  add constraint gdpr_datarequest_gdpr_datarequesttype_dataReqTypeID_fk
-    foreign key (dataReqTypeID) references gdpr_datarequesttype (dataReqTypeID);
-
-alter table gdpr_datarequest
   add constraint gdpr_datarequest_ibfk_1
     foreign key (dataID) references gdpr_data (dataID);
 

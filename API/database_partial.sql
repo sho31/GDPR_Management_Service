@@ -12,13 +12,6 @@ create table _prisma_migrations
 )
   collate = utf8mb4_unicode_ci;
 
-create table gdpr_datarequesttype
-(
-  dataReqTypeID   int auto_increment
-    primary key,
-  dataReqTypeName varchar(50) null
-);
-
 create table gdpr_datasubjectcategory
 (
   dsCategoryName varchar(25) not null,
@@ -49,7 +42,7 @@ create table gdpr_provider
   providerID   int auto_increment
     primary key,
   prName       varchar(40)  not null,
-  prAdress     varchar(250) not null,
+  prAddress    varchar(250) not null,
   prPostalCode varchar(40)  null,
   prCity       varchar(40)  null,
   prPhone      varchar(40)  null,
@@ -112,12 +105,10 @@ create table gdpr_datarequest
   claim         varchar(250) null,
   claimDate     datetime     null,
   newValue      varchar(250) null,
-  dataReqTypeID int          null,
+  dataReqType   varchar(250) not null,
   dataSubjectID int          null,
   dataID        int          null,
   oldValue      varchar(250) null,
-  constraint gdpr_datarequest_gdpr_datarequesttype_dataReqTypeID_fk
-    foreign key (dataReqTypeID) references gdpr_datarequesttype (dataReqTypeID),
   constraint gdpr_datarequest_ibfk_1
     foreign key (dataID) references gdpr_data (dataID),
   constraint gdpr_datarequest_ibfk_2
@@ -130,6 +121,9 @@ create index data
 
 create index dataSubject
   on gdpr_datarequest (dataSubjectID);
+
+create index gdpr_datarequest_gdpr_datarequesttype_dataReqTypeID_fk
+  on gdpr_datarequest (dataReqType);
 
 create table gdpr_datarequestanswer
 (

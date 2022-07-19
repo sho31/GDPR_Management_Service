@@ -14,6 +14,15 @@ class DataRequestsController {
       next(error);
     }
   };
+  public getUnansweredDataRequests = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
+    try {
+      const findAllDataRequestsData: gdpr_datarequest[] = await this.dataRequestService.findAllUnansweredDataRequest();
+
+      res.status(200).json({ data: findAllDataRequestsData, message: 'findAll' });
+    } catch (error) {
+      next(error);
+    }
+  };
 
   public getDataRequestById = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
     try {

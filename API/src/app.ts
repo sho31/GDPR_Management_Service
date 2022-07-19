@@ -8,7 +8,7 @@ import morgan from 'morgan';
 import { NODE_ENV, PORT, LOG_FORMAT, ORIGIN, CREDENTIALS } from '@config';
 import { Routes } from '@interfaces/routes.interface';
 import errorMiddleware from '@middlewares/error.middleware';
-import { logger, stream } from '@utils/logger'; //TODO: logger on heroku fix error
+import { stream } from '@utils/logger';
 
 class App {
   public app: express.Application;

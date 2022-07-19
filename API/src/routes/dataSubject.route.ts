@@ -15,6 +15,7 @@ class DataSubjectsRoute implements Routes {
   private initializeRoutes() {
     this.router.get(`${this.path}/getAll`, this.dataSubjectController.getDataSubjects);
     this.router.get(`${this.path}/getById/:dataSubjectID(\\d+)`, this.dataSubjectController.getDataSubjectById);
+    this.router.get(`${this.path}/getByIdRef/:data_subject_id_ref(\\d+)`, this.dataSubjectController.getDataSubjectByIdRef);
     this.router.post(`${this.path}/create`, this.dataSubjectController.createDataSubject);
     this.router.put(`${this.path}/update/:dataSubjectID(\\d+)`, this.dataSubjectController.updateDataSubject);
     this.router.delete(`${this.path}/delete/:id(\\d+)`, this.dataSubjectController.deleteDataSubject);

@@ -1,6 +1,7 @@
 import { gdpr_data, PrismaClient } from '@prisma/client';
 import { HttpException } from '@exceptions/HttpException';
 import { isEmpty } from '@utils/util';
+import { BatchPayload } from '@/types/generalTypes';
 
 class DataService {
   public datas = new PrismaClient().gdpr_data;
@@ -40,6 +41,15 @@ class DataService {
     if (!findData) throw new HttpException(409, 'There is no data');
 
     return await this.datas.delete({ where: { dataID: dataID } });
+  }
+
+  public async deleteAllFromDataSubject(dataSubjectID: number): Promise<BatchPayload> {
+    if (isEmpty(dataSubjectID)) throw new HttpException(400, 'There is no dataSubjectID');
+
+    const findData: gdpr_data[] = await this.datas.findMany({ where: { dataSubjectID: dataSubjectID } });
+    if (!findData) throw new HttpException(409, 'There is no data with this dataSubjectID');
+
+    return await this.datas.deleteMany({ where: { dataSubjectID: dataSubjectID } });
   }
 }
 

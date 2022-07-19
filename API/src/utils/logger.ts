@@ -2,12 +2,14 @@ import { existsSync, mkdirSync } from 'fs';
 import { join, dirname } from 'path';
 import winston from 'winston';
 import winstonDaily from 'winston-daily-rotate-file';
+import Transport from 'winston-transport';
 import { LOG_DIR } from '@config';
+import { MESSAGE } from 'triple-beam';
 
 // logs dir
 //const logDir: string = join(dirname(require.main.filename), LOG_DIR);
 const logDir = './logs';
-console.log(logDir);
+
 if (!existsSync(logDir)) {
   mkdirSync(logDir);
 }
@@ -19,6 +21,18 @@ const logFormat = winston.format.printf(({ timestamp, level, message }) => `${ti
  * Log Level
  * error: 0, warn: 1, info: 2, http: 3, verbose: 4, debug: 5, silly: 6
  */
+const level = process.env.LOG_LEVEL || 'info';
+class SimpleConsoleTransport extends Transport {
+  log = (info: any, callback: any) => {
+    setImmediate(() => this.emit('logged', info));
+
+    console.log(info[MESSAGE]);
+
+    if (callback) {
+      callback();
+    }
+  };
+}
 const logger = winston.createLogger({
   format: winston.format.combine(
     winston.format.timestamp({
@@ -48,19 +62,18 @@ const logger = winston.createLogger({
       json: false,
       zippedArchive: true,
     }),
+    new SimpleConsoleTransport(),
   ],
 });
 
 logger.add(
   new winston.transports.Console({
-    format: winston.format.combine(winston.format.splat(), winston.format.colorize()),
+    format: winston.format.simple(),
   }),
 );
-
 const stream = {
   write: (message: string) => {
     logger.info(message.substring(0, message.lastIndexOf('\n')));
   },
 };
-
 export { logger, stream };

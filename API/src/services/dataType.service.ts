@@ -1,53 +1,48 @@
-import { hash } from 'bcrypt';
-import { PrismaClient,gdpr_datatype } from '@prisma/client';
+import { gdpr_datatype, PrismaClient } from '@prisma/client';
 import { HttpException } from '@exceptions/HttpException';
 import { isEmpty } from '@utils/util';
 
 class DataTypeService {
-  public dataTypes = new PrismaClient().gdpr_datatype;
+  public dataType = new PrismaClient().gdpr_datatype;
 
   public async findAllDataType(): Promise<gdpr_datatype[]> {
-    const allDataType: gdpr_datatype[] = await this.dataTypes.findMany();
+    const allDataType: gdpr_datatype[] = await this.dataType.findMany();
     return allDataType;
   }
 
-  public async findDataTypeById(dataTypeId: number): Promise<gdpr_datatype> {
-    if (isEmpty(dataTypeId)) throw new HttpException(400, "There is no dataTypeId");
+  public async findDataTypeById(dataTypeID: number): Promise<gdpr_datatype> {
+    if (isEmpty(dataTypeID)) throw new HttpException(400, 'Please provide a dataTypeId');
 
-    const findDataType: gdpr_datatype = await this.dataTypes.findUnique({ where: { id: dataTypeId } });
-    if (!findDataType) throw new HttpException(409, "There is no dataType");
+    const findDataType: gdpr_datatype = await this.dataType.findUnique({
+      where: { dataTypeID: dataTypeID },
+    });
+    if (!findDataType) throw new HttpException(409, 'There is no dataType with this name');
 
     return findDataType;
   }
 
   public async createDataType(dataTypeData: gdpr_datatype): Promise<gdpr_datatype> {
-    if (isEmpty(dataTypeData)) throw new HttpException(400, "There is no dataTypeData");
+    if (isEmpty(dataTypeData)) throw new HttpException(400, 'There is no dataTypeData');
 
-    const findDataType: gdpr_datatype = await this.dataTypes.findUnique({ where: { email: dataTypeData.email } });
-    if (findDataType) throw new HttpException(409, `You're email ${dataTypeData.email} already exists`);
-
-    const hashedPassword = await hash(dataTypeData.password, 10);
-    const createDataTypeData: gdpr_datatype = await this.dataTypes.create({ data: { ...dataTypeData, password: hashedPassword } });
-    return createDataTypeData;
+    return await this.dataType.create({ data: { ...dataTypeData } });
   }
-
   public async updateDataType(dataTypeId: number, dataTypeData: gdpr_datatype): Promise<gdpr_datatype> {
-    if (isEmpty(dataTypeData)) throw new HttpException(400, "There is no dataTypeData");
+    if (isEmpty(dataTypeData)) throw new HttpException(400, 'There is no dataTypeData');
 
-    const findDataType: gdpr_datatype = await this.dataTypes.findUnique({ where: { id: dataTypeId } });
-    if (!findDataType) throw new HttpException(409, "There is no dataType");
-    const updateDataTypeData = await this.dataTypes.update({ where: { id: dataTypeId }, data: { ...dataTypeData} });
-    return updateDataTypeData;
+    const findDataType: gdpr_datatype = await this.dataType.findUnique({ where: { dataTypeID: dataTypeId } });
+    if (!findDataType) throw new HttpException(409, 'There is no dataType');
+    return await this.dataType.update({ where: { dataTypeID: dataTypeId }, data: { ...dataTypeData } });
   }
 
-  public async deleteDataType(dataTypeId: number): Promise<gdpr_datatype> {
-    if (isEmpty(dataTypeId)) throw new HttpException(400, "There is no dataTypeId");
+  public async deleteDataType(dataTypeID: number): Promise<gdpr_datatype> {
+    if (isEmpty(dataTypeID)) throw new HttpException(400, 'Please provide a dataTypeId');
 
-    const findDataType: gdpr_datatype = await this.dataTypes.findUnique({ where: { id: dataTypeId } });
-    if (!findDataType) throw new HttpException(409, "There is no dataType");
-
-    const deleteDataTypeData = await this.dataTypes.delete({ where: { id: dataTypeId } });
-    return deleteDataTypeData;
+    const findDataType: gdpr_datatype = await this.dataType.findUnique({
+      where: { dataTypeID: dataTypeID },
+    });
+    if (!findDataType) throw new HttpException(409, 'There is no dataType with this name');
+    //TODO : check if there is any dataSubject with this dataTypeID
+    return await this.dataType.delete({ where: { dataTypeID: dataTypeID } });
   }
 }
 

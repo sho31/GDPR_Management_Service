@@ -17,6 +17,7 @@ class DataRoute implements Routes {
     this.router.post(`${this.path}/create`, this.dataController.createData);
     this.router.put(`${this.path}/update/:dataID(\\d+)`, this.dataController.updateData);
     this.router.delete(`${this.path}/delete/:dataID(\\d+)`, this.dataController.deleteData);
+    this.router.delete(`${this.path}/deleteAllFromDataSubject/:dataSubjectID(\\d+)`, this.dataController.deleteAllFromDataSubject);
   }
 }
 

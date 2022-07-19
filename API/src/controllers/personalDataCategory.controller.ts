@@ -1,13 +1,14 @@
 import { NextFunction, Request, Response } from 'express';
 import { gdpr_personaldatacategory } from '@prisma/client';
-import personalDataCategorieservice from '@services/personalDataCategory.service';
+import personalDataCategoryService from '@services/personalDataCategory.service';
 
 class PersonalDataCategoriesController {
-  public personalDataCategorieservice = new personalDataCategorieservice();
+  public personalDataCategoryService = new personalDataCategoryService();
 
   public getPersonalDataCategories = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
     try {
-      const findAllPersonalDataCategoriesData: gdpr_personaldatacategory[] = await this.personalDataCategorieservice.findAllPersonalDataCategory();
+      console.log('getPersonalDataCategories');
+      const findAllPersonalDataCategoriesData: gdpr_personaldatacategory[] = await this.personalDataCategoryService.findAllPersonalDataCategory();
 
       res.status(200).json({ data: findAllPersonalDataCategoriesData, message: 'findAll' });
     } catch (error) {
@@ -18,7 +19,7 @@ class PersonalDataCategoriesController {
   public getPersonalDataCategoryById = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
     try {
       const personalDataCategoryId = Number(req.params.PDCategoryID);
-      const findOnePersonalDataCategoryData: gdpr_personaldatacategory = await this.personalDataCategorieservice.findPersonalDataCategoryById(
+      const findOnePersonalDataCategoryData: gdpr_personaldatacategory = await this.personalDataCategoryService.findPersonalDataCategoryById(
         personalDataCategoryId,
       );
 
@@ -31,7 +32,7 @@ class PersonalDataCategoriesController {
   public createPersonalDataCategory = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
     try {
       const personalDataCategoryData: gdpr_personaldatacategory = req.body;
-      const createPersonalDataCategoryData: gdpr_personaldatacategory = await this.personalDataCategorieservice.createPersonalDataCategory(
+      const createPersonalDataCategoryData: gdpr_personaldatacategory = await this.personalDataCategoryService.createPersonalDataCategory(
         personalDataCategoryData,
       );
 
@@ -45,7 +46,7 @@ class PersonalDataCategoriesController {
     try {
       const personalDataCategoryId = Number(req.params.PDCategoryID);
       const personalDataCategoryData: gdpr_personaldatacategory = req.body;
-      const updatePersonalDataCategoryData: gdpr_personaldatacategory = await this.personalDataCategorieservice.updatePersonalDataCategory(
+      const updatePersonalDataCategoryData: gdpr_personaldatacategory = await this.personalDataCategoryService.updatePersonalDataCategory(
         personalDataCategoryId,
         personalDataCategoryData,
       );
@@ -59,7 +60,7 @@ class PersonalDataCategoriesController {
   public deletePersonalDataCategory = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
     try {
       const personalDataCategoryId = Number(req.params.PDCategoryID);
-      const deletePersonalDataCategoryData: gdpr_personaldatacategory = await this.personalDataCategorieservice.deletePersonalDataCategory(
+      const deletePersonalDataCategoryData: gdpr_personaldatacategory = await this.personalDataCategoryService.deletePersonalDataCategory(
         personalDataCategoryId,
       );
 

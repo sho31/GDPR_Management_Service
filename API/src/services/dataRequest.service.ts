@@ -1,4 +1,4 @@
-import { gdpr_datarequest, PrismaClient } from '@prisma/client';
+import { gdpr_datarequestanswer, gdpr_datarequest, PrismaClient } from '@prisma/client';
 import { HttpException } from '@exceptions/HttpException';
 import { isEmpty } from '@utils/util';
 
@@ -7,6 +7,9 @@ class DataRequestService {
 
   public async findAllDataRequest(): Promise<gdpr_datarequest[]> {
     return await this.dataRequests.findMany();
+  }
+  public async findAllUnansweredDataRequest(): Promise<gdpr_datarequest[]> {
+    return await this.dataRequests.findMany({ include: { gdpr_datarequestanswer: true } });
   }
 
   public async findDataRequestById(dataRequestId: number): Promise<gdpr_datarequest> {

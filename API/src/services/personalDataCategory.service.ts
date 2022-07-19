@@ -1,56 +1,57 @@
-import { hash } from 'bcrypt';
-import { PrismaClient, gdpr_personaldatacategory } from '@prisma/client';
+import { gdpr_personaldatacategory, PrismaClient } from '@prisma/client';
 import { HttpException } from '@exceptions/HttpException';
 import { isEmpty } from '@utils/util';
 
-class PersonalDataCategorieservice {
-  public personalDataCategories = new PrismaClient().gdpr_personaldatacategory;
+class PersonalDataCategoryService {
+  public personalDataCategory = new PrismaClient().gdpr_personaldatacategory;
 
   public async findAllPersonalDataCategory(): Promise<gdpr_personaldatacategory[]> {
-    const allPersonalDataCategory: gdpr_personaldatacategory[] = await this.personalDataCategories.findMany();
+    const allPersonalDataCategory: gdpr_personaldatacategory[] = await this.personalDataCategory.findMany();
     return allPersonalDataCategory;
   }
 
-  public async findPersonalDataCategoryById(personalDataCategoryId: number): Promise<gdpr_personaldatacategory> {
-    if (isEmpty(personalDataCategoryId)) throw new HttpException(400, "There is no  personalDataCategoryId");
+  public async findPersonalDataCategoryById(PDCategoryID: number): Promise<gdpr_personaldatacategory> {
+    if (isEmpty(PDCategoryID)) throw new HttpException(400, 'Please provide a pDCategoryID');
 
-    const findPersonalDataCategory: gdpr_personaldatacategory = await this.personalDataCategories.findUnique({ where: { id: personalDataCategoryId } });
-    if (!findPersonalDataCategory) throw new HttpException(409, "There is no  personalDataCategory");
+    const findPersonalDataCategory: gdpr_personaldatacategory = await this.personalDataCategory.findUnique({
+      where: { PDCategoryID: PDCategoryID },
+    });
+    if (!findPersonalDataCategory) throw new HttpException(409, 'There is no personalDataCategory with this name');
 
     return findPersonalDataCategory;
   }
 
+  public async updatePersonalDataCategory(
+    pDCategoryID: number,
+    personalDataCategoryData: gdpr_personaldatacategory,
+  ): Promise<gdpr_personaldatacategory> {
+    if (isEmpty(personalDataCategoryData)) throw new HttpException(400, 'There is no personalDataCategoryData');
+
+    const findPersonalDataCategory: gdpr_personaldatacategory = await this.personalDataCategory.findUnique({
+      where: { PDCategoryID: pDCategoryID },
+    });
+    if (!findPersonalDataCategory) throw new HttpException(409, 'There is no personalDataCategory');
+    return await this.personalDataCategory.update({
+      where: { PDCategoryID: pDCategoryID },
+      data: { ...personalDataCategoryData },
+    });
+  }
   public async createPersonalDataCategory(personalDataCategoryData: gdpr_personaldatacategory): Promise<gdpr_personaldatacategory> {
-    if (isEmpty(personalDataCategoryData)) throw new HttpException(400, "There is no  personalDataCategoryData");
+    if (isEmpty(personalDataCategoryData)) throw new HttpException(400, 'There is no personalDataCategoryData');
 
-    const findPersonalDataCategory: gdpr_personaldatacategory = await this.personalDataCategories.findUnique({ where: { email: personalDataCategoryData.email } });
-    if (findPersonalDataCategory) throw new HttpException(409, `You're email ${personalDataCategoryData.email} already exists`);
-
-    const hashedPassword = await hash(personalDataCategoryData.password, 10);
-    const createPersonalDataCategoryData: gdpr_personaldatacategory = await this.personalDataCategories.create({ data: { ...personalDataCategoryData, password: hashedPassword } });
-    return createPersonalDataCategoryData;
+    return await this.personalDataCategory.create({ data: { ...personalDataCategoryData } });
   }
 
-  public async updatePersonalDataCategory(personalDataCategoryId: number, personalDataCategoryData: gdpr_personaldatacategory): Promise<PersonalDataCategory> {
-    if (isEmpty(personalDataCategoryData)) throw new HttpException(400, "There is no  personalDataCategoryData");
+  public async deletePersonalDataCategory(PDCategoryID: number): Promise<gdpr_personaldatacategory> {
+    if (isEmpty(PDCategoryID)) throw new HttpException(400, 'Please provide a pDCategoryID');
 
-    const findPersonalDataCategory: gdpr_personaldatacategory = await this.personalDataCategories.findUnique({ where: { id: personalDataCategoryId } });
-    if (!findPersonalDataCategory) throw new HttpException(409, "There is no  personalDataCategory");
-
-    const hashedPassword = await hash(personalDataCategoryData.password, 10);
-    const updatePersonalDataCategoryData = await this.personalDataCategories.update({ where: { id: personalDataCategoryId }, data: { ...personalDataCategoryData, password: hashedPassword } });
-    return updatePersonalDataCategoryData;
-  }
-
-  public async deletePersonalDataCategory(personalDataCategoryId: number): Promise<gdpr_personaldatacategory> {
-    if (isEmpty(personalDataCategoryId)) throw new HttpException(400, "There is no  personalDataCategoryId");
-
-    const findPersonalDataCategory: gdpr_personaldatacategory = await this.personalDataCategories.findUnique({ where: { id: personalDataCategoryId } });
-    if (!findPersonalDataCategory) throw new HttpException(409, "There is no  personalDataCategory");
-
-    const deletePersonalDataCategoryData = await this.personalDataCategories.delete({ where: { id: personalDataCategoryId } });
-    return deletePersonalDataCategoryData;
+    const findPersonalDataCategory: gdpr_personaldatacategory = await this.personalDataCategory.findUnique({
+      where: { PDCategoryID: PDCategoryID },
+    });
+    if (!findPersonalDataCategory) throw new HttpException(409, 'There is no personalDataCategory with this name');
+    //TODO : check if there is any dataSubject with this PDCategoryID
+    return await this.personalDataCategory.delete({ where: { PDCategoryID: PDCategoryID } });
   }
 }
 
-export default PersonalDataCategorieservice;
+export default PersonalDataCategoryService;

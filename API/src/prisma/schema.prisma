@@ -32,18 +32,17 @@ model gdpr_datarequest {
   claim                  String?                  @db.VarChar(250)
   claimDate              DateTime?                @db.DateTime(0)
   newValue               String?                  @db.VarChar(250)
-  dataReqTypeID          Int?
+  dataReqType            String                   @db.VarChar(250)
   dataSubjectID          Int?
   dataID                 Int?
   oldValue               String?                  @db.VarChar(250)
   gdpr_data              gdpr_data?               @relation(fields: [dataID], references: [dataID], onDelete: NoAction, onUpdate: NoAction, map: "gdpr_datarequest_ibfk_1")
-  gdpr_datarequesttype   gdpr_datarequesttype?    @relation(fields: [dataReqTypeID], references: [dataReqTypeID], onDelete: NoAction, onUpdate: NoAction, map: "gdpr_datarequest_gdpr_datarequesttype_dataReqTypeID_fk")
   gdpr_datasubject       gdpr_datasubject?        @relation(fields: [dataSubjectID], references: [dataSubjectID], onDelete: NoAction, onUpdate: NoAction, map: "gdpr_datarequest_ibfk_2")
   gdpr_datarequestanswer gdpr_datarequestanswer[]
 
   @@index([dataID], map: "data")
   @@index([dataSubjectID], map: "dataSubject")
-  @@index([dataReqTypeID], map: "gdpr_datarequest_gdpr_datarequesttype_dataReqTypeID_fk")
+  @@index([dataReqType], map: "gdpr_datarequest_gdpr_datarequesttype_dataReqTypeID_fk")
 }
 
 model gdpr_datarequestanswer {
@@ -59,7 +58,7 @@ model gdpr_datarequestanswer {
 
 model gdpr_datasubject {
   dataSubjectID            Int                       @id @default(autoincrement())
-  data_subject_id_ref      Int                       @default(0)
+  data_subject_id_ref      Int                       @unique(map: "const2") @default(0)
   tutorID                  Int?
   dataSubjectCategoryID    Int?
   gdpr_datasubjectcategory gdpr_datasubjectcategory? @relation(fields: [dataSubjectCategoryID], references: [dsCategoryID], onDelete: NoAction, onUpdate: NoAction, map: "gdpr_datasubject_gdpr_datasubjectcategory_dsCategoryID_fk")
@@ -67,7 +66,6 @@ model gdpr_datasubject {
   gdpr_data                gdpr_data[]
   gdpr_datarequest         gdpr_datarequest[]
 
-  @@index([data_subject_id_ref], map: "const2")
   @@index([dataSubjectCategoryID], map: "gdpr_datasubject_gdpr_datasubjectcategory_dsCategoryID_fk")
   @@index([tutorID], map: "gdpr_datasubject_gdpr_tutor_tutorID_fk")
 }
@@ -94,7 +92,7 @@ model gdpr_personaldatacategory {
 model gdpr_provider {
   providerID   Int     @id @default(autoincrement())
   prName       String  @db.VarChar(40)
-  prAdress     String  @db.VarChar(250)
+  prAddress    String  @db.VarChar(250)
   prPostalCode String? @db.VarChar(40)
   prCity       String? @db.VarChar(40)
   prPhone      String? @db.VarChar(40)
@@ -109,10 +107,4 @@ model gdpr_tutor {
   gdpr_datasubject gdpr_datasubject[]
 
   @@index([country], map: "country")
-}
-
-model gdpr_datarequesttype {
-  dataReqTypeID    Int                @id @default(autoincrement())
-  dataReqTypeName  String?            @db.VarChar(50)
-  gdpr_datarequest gdpr_datarequest[]
 }

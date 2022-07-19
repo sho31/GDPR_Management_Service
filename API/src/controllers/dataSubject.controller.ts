@@ -25,6 +25,16 @@ class DataSubjectsController {
       next(error);
     }
   };
+  public getDataSubjectByIdRef = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
+    try {
+      const dataSubjectIdRef = Number(req.params.data_subject_id_ref);
+      const findOneDataSubjectData: gdpr_datasubject = await this.dataSubjectService.findDataSubjectByIdRef(dataSubjectIdRef);
+
+      res.status(200).json({ data: findOneDataSubjectData, message: 'findOne' });
+    } catch (error) {
+      next(error);
+    }
+  };
 
   public createDataSubject = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
     try {

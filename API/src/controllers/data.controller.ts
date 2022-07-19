@@ -1,5 +1,6 @@
 import { NextFunction, Request, Response } from 'express';
 import { gdpr_data } from '@prisma/client';
+import { BatchPayload } from '@/types/generalTypes';
 import dataService from '@services/data.service';
 
 class DataController {
@@ -55,6 +56,17 @@ class DataController {
       const deleteDataData: gdpr_data = await this.dataService.deleteData(dataId);
 
       res.status(200).json({ data: deleteDataData, message: 'deleted' });
+    } catch (error) {
+      next(error);
+    }
+  };
+
+  public deleteAllFromDataSubject = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
+    try {
+      const dataSubjectID = Number(req.params.dataSubjectID);
+      const deletedData: BatchPayload = await this.dataService.deleteAllFromDataSubject(dataSubjectID);
+
+      res.status(200).json({ data: deletedData, message: 'deleted' });
     } catch (error) {
       next(error);
     }

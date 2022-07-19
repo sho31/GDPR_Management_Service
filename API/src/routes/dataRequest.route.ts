@@ -14,6 +14,7 @@ class DataRequestsRoute implements Routes {
 
   private initializeRoutes() {
     this.router.get(`${this.path}/getAll`, this.dataRequestsController.getDataRequests);
+    this.router.get(`${this.path}/getAllUnanswered`, this.dataRequestsController.getUnansweredDataRequests);
     this.router.get(`${this.path}/getById/:DataRequestID(\\d+)`, this.dataRequestsController.getDataRequestById);
     this.router.post(`${this.path}/create`, this.dataRequestsController.createDataRequest);
     this.router.put(`${this.path}/update/:DataRequestID(\\d+)`, this.dataRequestsController.updateDataRequest);
