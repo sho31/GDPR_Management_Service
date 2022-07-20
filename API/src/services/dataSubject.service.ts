@@ -28,17 +28,32 @@ class DataSubjectService {
 
   public async createDataSubject(dataSubjectData: gdpr_datasubject): Promise<gdpr_datasubject> {
     if (isEmpty(dataSubjectData)) throw new HttpException(400, 'There is no  dataSubjectData');
-    return await this.dataSubjects.create({ data: { ...dataSubjectData } });
+    console.log(dataSubjectData);
+    return await this.dataSubjects.create({
+      data: {
+        data_subject_id_ref: Number(dataSubjectData.data_subject_id_ref),
+        tutorID: Number(dataSubjectData.tutorID),
+        dataSubjectCategoryID: Number(dataSubjectData.dataSubjectCategoryID),
+      },
+    });
   }
 
   public async updateDataSubject(dataSubjectId: number, dataSubjectData: gdpr_datasubject): Promise<gdpr_datasubject> {
     if (isEmpty(dataSubjectData)) throw new HttpException(400, 'There is no  dataSubject Data provided');
     const findDataSubject: gdpr_datasubject = await this.dataSubjects.findUnique({ where: { dataSubjectID: dataSubjectId } });
     if (!findDataSubject) throw new HttpException(409, 'There is no dataSubject');
-    return await this.dataSubjects.update({ where: { dataSubjectID: dataSubjectId }, data: { ...dataSubjectData } });
+    return await this.dataSubjects.update({
+      where: { dataSubjectID: dataSubjectId },
+      data: {
+        data_subject_id_ref: Number(dataSubjectData.data_subject_id_ref),
+        tutorID: Number(dataSubjectData.tutorID),
+        dataSubjectCategoryID: Number(dataSubjectData.dataSubjectCategoryID),
+      },
+    });
   }
 
   public async deleteDataSubject(dataSubjectId: number): Promise<gdpr_datasubject> {
+    console.log('dataSubjectId', dataSubjectId);
     if (isEmpty(dataSubjectId)) throw new HttpException(400, 'There is no dataSubjectId');
 
     const findDataSubject: gdpr_datasubject = await this.dataSubjects.findUnique({ where: { dataSubjectID: dataSubjectId } });

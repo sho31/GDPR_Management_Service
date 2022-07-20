@@ -47,7 +47,7 @@ model gdpr_datarequest {
 
 model gdpr_datarequestanswer {
   dataRequestAnswerId Int               @id @default(autoincrement())
-  answer              Boolean?
+  acceptedRequest     Boolean?
   justification       String?           @db.VarChar(150)
   DataRequestID       Int?
   processedAnswer     Boolean?          @default(false)

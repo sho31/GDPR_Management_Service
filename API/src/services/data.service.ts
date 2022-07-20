@@ -22,7 +22,18 @@ class DataService {
 
   public async createData(data: gdpr_data): Promise<gdpr_data> {
     if (isEmpty(data)) throw new HttpException(400, 'There is no data');
-    return await this.datas.create({ data: { ...data } });
+    return await this.datas.create({
+      data: {
+        source: data.source,
+        dataConservation: Number(data.dataConservation),
+        isPersonal: Boolean(data.isPersonal),
+        isModifiable: Boolean(data.isModifiable),
+        data_ID_ref: Number(data.data_ID_ref),
+        personalDataCategoryID: Number(data.personalDataCategoryID),
+        dataSubjectID: Number(data.dataSubjectID),
+        dataTypeID: Number(data.dataTypeID),
+      },
+    });
   }
 
   public async updateData(dataID: number, data: gdpr_data): Promise<gdpr_data> {
@@ -31,7 +42,19 @@ class DataService {
     const findData: gdpr_data = await this.datas.findUnique({ where: { dataID: dataID } });
     if (!findData) throw new HttpException(409, 'There is no data');
 
-    return await this.datas.update({ where: { dataID: dataID }, data: { ...data } });
+    return await this.datas.update({
+      where: { dataID: dataID },
+      data: {
+        source: data.source,
+        dataConservation: Number(data.dataConservation),
+        isPersonal: Boolean(data.isPersonal),
+        isModifiable: Boolean(data.isModifiable),
+        data_ID_ref: Number(data.data_ID_ref),
+        personalDataCategoryID: Number(data.personalDataCategoryID),
+        dataSubjectID: Number(data.dataSubjectID),
+        dataTypeID: Number(data.dataTypeID),
+      },
+    });
   }
 
   public async deleteData(dataID: number): Promise<gdpr_data> {
