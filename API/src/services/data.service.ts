@@ -1,4 +1,4 @@
-import { gdpr_data, PrismaClient } from '@prisma/client';
+import { gdpr_data, gdpr_datarequest, PrismaClient } from '@prisma/client';
 import { HttpException } from '@exceptions/HttpException';
 import { isEmpty } from '@utils/util';
 import { BatchPayload } from '@/types/generalTypes';
@@ -10,7 +10,14 @@ class DataService {
     const allData: gdpr_data[] = await this.datas.findMany();
     return allData;
   }
+  public async findAllDataBySubjectId(dataSubjectID: number): Promise<gdpr_data[]> {
+    if (isEmpty(dataSubjectID)) throw new HttpException(400, 'There is no dataSubjectID');
 
+    const findData: gdpr_data[] = await this.datas.findMany({ where: { dataSubjectID: dataSubjectID } });
+    if (!findData) throw new HttpException(409, 'There is no dataSubjectID');
+
+    return findData;
+  }
   public async findDataById(dataID: number): Promise<gdpr_data> {
     if (isEmpty(dataID)) throw new HttpException(400, 'There is no dataID');
 

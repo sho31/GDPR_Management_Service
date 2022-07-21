@@ -1,17 +1,3 @@
-create table _prisma_migrations
-(
-  id                  varchar(36)                               not null
-    primary key,
-  checksum            varchar(64)                               not null,
-  finished_at         datetime(3)                               null,
-  migration_name      varchar(255)                              not null,
-  logs                text                                      null,
-  rolled_back_at      datetime(3)                               null,
-  started_at          datetime(3)  default CURRENT_TIMESTAMP(3) not null,
-  applied_steps_count int unsigned default '0'                  not null
-)
-  collate = utf8mb4_unicode_ci;
-
 create table gdpr_datasubjectcategory
 (
   dsCategoryName varchar(25) not null,
@@ -67,6 +53,8 @@ create table gdpr_datasubject
   data_subject_id_ref   int default 0 not null,
   tutorID               int           null,
   dataSubjectCategoryID int           null,
+  constraint const2
+    unique (data_subject_id_ref),
   constraint gdpr_datasubject_gdpr_datasubjectcategory_dsCategoryID_fk
     foreign key (dataSubjectCategoryID) references gdpr_datasubjectcategory (dsCategoryID),
   constraint gdpr_datasubject_gdpr_tutor_tutorID_fk
@@ -86,6 +74,9 @@ create table gdpr_data
   dataTypeID             int         null,
   data_ID_ref            int         null,
   dataSubjectID          int         null,
+  creationDate           datetime    null,
+  lastModificationDate   datetime    null,
+  deletionDate           datetime    null,
   constraint gdpr_data_gdpr_datasubject_dataSubjectID_fk
     foreign key (dataSubjectID) references gdpr_datasubject (dataSubjectID),
   constraint gdpr_data_ibfk_1
@@ -129,7 +120,7 @@ create table gdpr_datarequestanswer
 (
   dataRequestAnswerId int auto_increment
     primary key,
-  answer              tinyint(1)           null,
+  acceptedRequest     tinyint(1)           null,
   justification       varchar(150)         null,
   DataRequestID       int                  null,
   processedAnswer     tinyint(1) default 0 null,
@@ -140,9 +131,6 @@ create table gdpr_datarequestanswer
 
 create index datarequest
   on gdpr_datarequestanswer (DataRequestID);
-
-create index const2
-  on gdpr_datasubject (data_subject_id_ref);
 
 create index country
   on gdpr_tutor (country);

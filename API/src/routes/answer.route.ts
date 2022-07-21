@@ -14,9 +14,11 @@ class AnswersRoute implements Routes {
 
   private initializeRoutes() {
     this.router.get(`${this.path}/getAll`, this.answersController.getAnswers);
+    this.router.get(`${this.path}/getAllUnprocessedDataRequestAnswers`, this.answersController.getUnprocessedAnswers);
     this.router.get(`${this.path}/getById/:dataRequestAnswerId(\\d+)`, this.answersController.getAnswerById);
     this.router.post(`${this.path}/create`, this.answersController.createAnswer);
     this.router.put(`${this.path}/update/:dataRequestAnswerId(\\d+)`, this.answersController.updateAnswer);
+    this.router.put(`${this.path}/process/:dataRequestAnswerId(\\d+)`, this.answersController.processAnswer);
     this.router.delete(`${this.path}/delete/:dataRequestAnswerId(\\d+)`, this.answersController.deleteAnswer);
   }
 }

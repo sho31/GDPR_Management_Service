@@ -11,10 +11,27 @@ class DataRequestService {
   }
   public async findAllUnansweredDataRequest(): Promise<gdpr_datarequest[]> {
     let dr: any[] = await this.dataRequests.findMany({ include: { gdpr_datarequestanswer: true } });
-    dr = dr.filter(d => d.gdpr_datarequestanswer === []);
+    dr = dr.filter(d => d.gdpr_datarequestanswer.length === 0);
     return dr;
   }
+  public async findAllDataRequestBySubjectId(dataSubjectID: number): Promise<gdpr_datarequest[]> {
+    if (isEmpty(dataSubjectID)) throw new HttpException(400, 'There is no dataSubjectID');
 
+    const findDataRequest: gdpr_datarequest[] = await this.dataRequests.findMany({ where: { dataSubjectID: dataSubjectID } });
+    if (!findDataRequest) throw new HttpException(409, 'There is no dataSubjectID');
+
+    return findDataRequest;
+  }
+  public async findDataRequestByAnswerId(dataRequestAnswerId: number): Promise<gdpr_datarequest> {
+    if (isEmpty(dataRequestAnswerId)) throw new HttpException(400, 'There is no dataRequestId');
+
+    const findDataRequest: gdpr_datarequest[] = await this.dataRequests.findMany({
+      where: { gdpr_datarequestanswer: { some: { dataRequestAnswerId: dataRequestAnswerId } } },
+    });
+    if (!findDataRequest) throw new HttpException(409, 'There is no dataRequest');
+
+    return findDataRequest[0];
+  }
   public async findDataRequestById(dataRequestId: number): Promise<gdpr_datarequest> {
     if (isEmpty(dataRequestId)) throw new HttpException(400, 'There is no dataRequestId');
 

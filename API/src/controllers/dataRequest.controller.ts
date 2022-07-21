@@ -14,11 +14,32 @@ class DataRequestsController {
       next(error);
     }
   };
+  public getDataRequestsByDataSubjectId = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
+    try {
+      const dataSubjectID = Number(req.params.dataSubjectID);
+      const findDataRequestsData: gdpr_datarequest[] = await this.dataRequestService.findAllDataRequestBySubjectId(dataSubjectID);
+
+      res.status(200).json({ data: findDataRequestsData, message: 'findAll' });
+    } catch (error) {
+      next(error);
+    }
+  };
+
   public getUnansweredDataRequests = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
     try {
       const findAllDataRequestsData: gdpr_datarequest[] = await this.dataRequestService.findAllUnansweredDataRequest();
 
       res.status(200).json({ data: findAllDataRequestsData, message: 'findAll' });
+    } catch (error) {
+      next(error);
+    }
+  };
+  public getDataRequestByAnswerId = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
+    try {
+      const dataRequestAnswerId = Number(req.params.dataRequestAnswerId);
+      const findOneDataRequestData: gdpr_datarequest = await this.dataRequestService.findDataRequestByAnswerId(dataRequestAnswerId);
+
+      res.status(200).json({ data: findOneDataRequestData, message: 'findOne' });
     } catch (error) {
       next(error);
     }

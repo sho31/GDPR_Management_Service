@@ -1,5 +1,5 @@
 import { NextFunction, Request, Response } from 'express';
-import { gdpr_data } from '@prisma/client';
+import { gdpr_data, gdpr_datarequest } from '@prisma/client';
 import { BatchPayload } from '@/types/generalTypes';
 import dataService from '@services/data.service';
 
@@ -11,6 +11,16 @@ class DataController {
       const findAllData: gdpr_data[] = await this.dataService.findAllData();
 
       res.status(200).json({ data: findAllData, message: 'findAll' });
+    } catch (error) {
+      next(error);
+    }
+  };
+  public getDataByDataSubjectId = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
+    try {
+      const dataSubjectID = Number(req.params.dataSubjectID);
+      const findDataRequestsData: gdpr_datarequest[] = await this.dataService.findAllDataBySubjectId(dataSubjectID);
+
+      res.status(200).json({ data: findDataRequestsData, message: 'findAll' });
     } catch (error) {
       next(error);
     }
