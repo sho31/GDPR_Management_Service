@@ -5,15 +5,34 @@ import { BatchPayload } from '@/types/generalTypes';
 
 class DataService {
   public datas = new PrismaClient().gdpr_data;
+  public dataRequests = new PrismaClient().gdpr_datarequest;
 
   public async findAllData(): Promise<gdpr_data[]> {
     const allData: gdpr_data[] = await this.datas.findMany();
     return allData;
   }
+  public async findAllDataWithoutDataRequestBySubjectId(dataSubjectID: number): Promise<gdpr_data[]> {
+    const dataIDsInRequests = await this.dataRequests.findMany({ include: { gdpr_data: { select: { dataID: true } } } });
+    const ids = dataIDsInRequests.map(d => d.dataID);
+    return await this.datas.findMany({
+      where: {
+        NOT: {
+          dataID: { in: ids },
+        },
+        dataSubjectID: dataSubjectID,
+      },
+      include: { gdpr_datatype: true },
+    });
+  }
+  public async findAllUnansweredDataRequest(): Promise<gdpr_datarequest[]> {
+    let dr: any[] = await this.dataRequests.findMany({ include: { gdpr_datarequestanswer: true } });
+    dr = dr.filter(d => d.gdpr_datarequestanswer.length === 0);
+    return dr;
+  }
   public async findAllDataBySubjectId(dataSubjectID: number): Promise<gdpr_data[]> {
     if (isEmpty(dataSubjectID)) throw new HttpException(400, 'There is no dataSubjectID');
 
-    const findData: gdpr_data[] = await this.datas.findMany({ where: { dataSubjectID: dataSubjectID } });
+    const findData: gdpr_data[] = await this.datas.findMany({ where: { dataSubjectID: dataSubjectID }, include: { gdpr_datatype: true } });
     if (!findData) throw new HttpException(409, 'There is no dataSubjectID');
 
     return findData;
@@ -36,7 +55,6 @@ class DataService {
         isPersonal: Boolean(data.isPersonal),
         isModifiable: Boolean(data.isModifiable),
         data_ID_ref: Number(data.data_ID_ref),
-        personalDataCategoryID: Number(data.personalDataCategoryID),
         dataSubjectID: Number(data.dataSubjectID),
         dataTypeID: Number(data.dataTypeID),
       },
@@ -57,7 +75,6 @@ class DataService {
         isPersonal: Boolean(data.isPersonal),
         isModifiable: Boolean(data.isModifiable),
         data_ID_ref: Number(data.data_ID_ref),
-        personalDataCategoryID: Number(data.personalDataCategoryID),
         dataSubjectID: Number(data.dataSubjectID),
         dataTypeID: Number(data.dataTypeID),
       },

@@ -1,4 +1,3 @@
-import { hash } from 'bcrypt';
 import { PrismaClient, gdpr_provider } from '@prisma/client';
 import { HttpException } from '@exceptions/HttpException';
 import { isEmpty } from '@utils/util';

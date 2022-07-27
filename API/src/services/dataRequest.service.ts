@@ -1,4 +1,4 @@
-import { gdpr_datarequest, PrismaClient } from '@prisma/client';
+import { gdpr_datarequest, gdpr_datatype, PrismaClient } from '@prisma/client';
 import { HttpException } from '@exceptions/HttpException';
 import { isEmpty } from '@utils/util';
 import { dataRequestType } from '@/types/generalTypes';
@@ -7,10 +7,29 @@ class DataRequestService {
   public dataRequests = new PrismaClient().gdpr_datarequest;
 
   public async findAllDataRequest(): Promise<gdpr_datarequest[]> {
-    return await this.dataRequests.findMany();
+    return await this.dataRequests.findMany({
+      include: {
+        gdpr_datasubject: true,
+        gdpr_data: {
+          include: {
+            gdpr_datatype: true,
+          },
+        },
+      },
+    });
   }
   public async findAllUnansweredDataRequest(): Promise<gdpr_datarequest[]> {
-    let dr: any[] = await this.dataRequests.findMany({ include: { gdpr_datarequestanswer: true } });
+    let dr: any[] = await this.dataRequests.findMany({
+      include: {
+        gdpr_datasubject: true,
+        gdpr_data: {
+          include: {
+            gdpr_datatype: true,
+          },
+        },
+        gdpr_datarequestanswer: true,
+      },
+    });
     dr = dr.filter(d => d.gdpr_datarequestanswer.length === 0);
     return dr;
   }

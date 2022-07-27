@@ -13,9 +13,14 @@ class DataRoute implements Routes {
 
   private initializeRoutes() {
     this.router.get(`${this.path}/getAll`, this.dataController.getData);
-    this.router.get(`${this.path}/getAllByDataSubjectId/:dataSubjectID(\\d+)`, this.dataController.getDataById);
+
+    this.router.get(`${this.path}/getAllByDataSubjectId/:dataSubjectID(\\d+)`, this.dataController.getDataByDataSubjectId); //Method used by datasubject
+    this.router.get(
+      `${this.path}/getAllWithoutRequestByDataSubjectId/:dataSubjectID(\\d+)`,
+      this.dataController.getDataWithoutRequestsByDataSubjectId,
+    ); //Method used by datasubject
     this.router.get(`${this.path}/getById/:dataID(\\d+)`, this.dataController.getDataById);
-    this.router.post(`${this.path}/create`, this.dataController.createData);
+    this.router.post(`${this.path}/create`, this.dataController.createData); //Method used by datasubject
     this.router.put(`${this.path}/update/:dataID(\\d+)`, this.dataController.updateData);
     this.router.delete(`${this.path}/delete/:dataID(\\d+)`, this.dataController.deleteData);
     this.router.delete(`${this.path}/deleteAllFromDataSubject/:dataSubjectID(\\d+)`, this.dataController.deleteAllFromDataSubject);

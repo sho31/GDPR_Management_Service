@@ -8,6 +8,7 @@ import morgan from 'morgan';
 import { NODE_ENV, PORT, LOG_FORMAT, ORIGIN, CREDENTIALS } from '@config';
 import { Routes } from '@interfaces/routes.interface';
 import errorMiddleware from '@middlewares/error.middleware';
+import apiKeyAuthMiddleware from '@middlewares/apiKey.middleware';
 import { stream } from '@utils/logger';
 
 class App {
@@ -47,6 +48,7 @@ class App {
     this.app.use(express.json());
     this.app.use(express.urlencoded({ extended: true }));
     this.app.use(cookieParser());
+    this.app.use(apiKeyAuthMiddleware);
   }
 
   private initializeRoutes(routes: Routes[]) {
