@@ -1,5 +1,8 @@
+#Sample Application
+This folder is derived from the following repository, and serves as an exemple our Service is adapted onto.
+https://github.com/FSojitra/Registration-Login-and-CRUD-Action-using-MERN-stack
 # MERN Stack | Login, Register and CRUD app
-Simlple example of user registration, login and CRUD action with backend restAPI using mongoDB, Nodejs(Express.js) and mongoose, authentication using JWT token also pagination and frontend using react.js and material-ui api calling with axios.
+Simple example of user registration, login and CRUD action with backend restAPI using mongoDB, Nodejs(Express.js) and mongoose, authentication using JWT token also pagination and frontend using react.js and material-ui api calling with axios.
 
 [![flow](https://github.com/FSojitra/Registration-Login-and-CRUD-Action-using-MERN-stack/blob/development/MERN.gif)](https://github.com/FSojitra/Registration-Login-and-CRUD-Action-using-MERN-stack/blob/development/MERN.gif)
 
