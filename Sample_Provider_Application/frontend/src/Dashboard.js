@@ -27,7 +27,8 @@ export default class Dashboard extends Component {
       search: '',
       personalDatas: [],
       pages: 0,
-      loading: false
+      loading: false,
+      apiKey : ''
     };
   }
 
@@ -39,10 +40,11 @@ export default class Dashboard extends Component {
     } else {
       this.setState({ token: token, user_id : user_id }, () => {
         this.getPersonalData();
+        this.getGDPRMS_API_Key();
       });
     }
   }
-
+''
   getPersonalData = () => {
     
     this.setState({ loading: true });
@@ -118,15 +120,30 @@ export default class Dashboard extends Component {
       });
     }
   };
+  getGDPRMS_API_Key = () => {
+    axios.get(`http://localhost:2000/get-apiKey`, {
+      headers: {
+        'token': this.state.token
+      }
+    }).then(async (response) => {
+      this.setState({apiKey: response.data.apiKey});
+    }).catch((err) => {
+      swal({
+        text: err.response.data.errorMessage,
+        icon: "error",
+        type: "error"
+      });
+    });
+  }
   openGDPRPage = () => {
     console.log(this.state)
-    fetch('http://localhost:3000/dataSubject/getByIdRef/' + this.state.user_id, {
+    fetch( process.env.REACT_APP_GDPRMS_API_ADDRESS+ '/dataSubject/getByIdRef/' + this.state.user_id, {
       method: 'GET',
-      headers: {'Content-Type': 'application/json'},
+      headers: {'api-key': this.state.apiKey},
     }).then(async (response) => {
       const res = await response.json()
-      console.log(res.data$)
-      window.open('http://localhost:3001/user/' + res.data.dataSubjectID);
+      console.log(res.data)
+      window.open(process.env.REACT_APP_GDPRMS_CLIENT_ADDRESS+'/user/' + res.data.dataSubjectID);
     }).catch((err) => {
         console.log(err);
     });

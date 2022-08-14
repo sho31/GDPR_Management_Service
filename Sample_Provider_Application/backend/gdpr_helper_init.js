@@ -9,7 +9,7 @@ const gdpr_helper_init = () => {
         } else {
             users.forEach(user => {
                 console.log(user.username);
-                fetch('http://localhost:3000/dataSubject/create', {
+                fetch(process.env.GDPRMS_ADDRESS + '/dataSubject/create', {
                     method: 'POST',
                     headers: {'Content-Type': 'application/json'},
                     body: JSON.stringify({data_subject_id_ref : user._id})
@@ -21,7 +21,7 @@ const gdpr_helper_init = () => {
                             console.log(err);
                         } else {
                             personalDatas.forEach(personalData => {
-                                fetch('http://localhost:3000/data/create', {
+                                fetch(process.env.GDPRMS_ADDRESS + '/data/create', {
                                     method: 'POST',
                                     headers: {'Content-Type': 'application/json'},
                                     body: JSON.stringify({data_ID_ref : personalData._id, attributeName : 'content', dataTypeID : 4, dataSubjectID : DataSubjectRes.data.dataSubjectID})

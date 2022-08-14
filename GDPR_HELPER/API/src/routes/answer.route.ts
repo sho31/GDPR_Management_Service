@@ -2,6 +2,7 @@ import { Router } from 'express';
 import AnswersController from '@controllers/answer.controller';
 import { Routes } from '@interfaces/routes.interface';
 import validationMiddleware from '@middlewares/validation.middleware';
+import apiKeyAuthMiddleware from '@middlewares/apiKey.middleware';
 
 class AnswersRoute implements Routes {
   public path = '/dataRequestAnswer';

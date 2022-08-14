@@ -15,6 +15,7 @@ var gdpr_helper_init = require("./gdpr_helper_init.js");
 //gdpr_helper_init(); //Execute only once
 var dir = './uploads';
 const fetch = (...args) => import('node-fetch').then(({default: fetch}) => fetch(...args));
+require('dotenv').config()
 var upload = multer({
   storage: multer.diskStorage({
 
@@ -83,15 +84,27 @@ app.get("/getContent", (req, res) => {
 app.get("/processAnswers", (req, res) => {
   console.log("Processing answers");
   try {
+    let myHeaders = new Headers();
+    console.log(process.env.GDPRMS_API_KEY)
+    myHeaders.append("api-key", process.env.GDPRMS_API_KEY);
+    let myInit = { method: 'GET',
+      headers: myHeaders,
+    };
     fetch('http://localhost:3000/dataRequestAnswer/getAllUnprocessedDataRequestAnswers', {
       method: 'GET',
-      headers: {'Content-Type': 'application/json'},
+      headers: myHeaders,
     }).then(async response => {
       res = await response.json();
       res.data.forEach(answer => {
         console.log(answer)
         if(Boolean(answer.acceptedRequest)){
           const reqType = answer.gdpr_datarequest.dataReqType;
+          let myHeadersPUT = myHeaders
+          myHeadersPUT.append("Content-Type", "application/json");
+          myHeadersPUT.append("api-key", process.env.GDPRMS_API_KEY);
+          let myInitPUT = { method: 'PUT',
+            headers: myHeadersPUT,
+          };
           switch (reqType) {
             case 'RECTIFICATION':
               personalData.findOne({ _id: answer.gdpr_datarequest.gdpr_data.data_ID_ref }, (err, personalData) => {
@@ -101,24 +114,24 @@ app.get("/processAnswers", (req, res) => {
                   personalData[answer.gdpr_datarequest.gdpr_data.attributeName] = answer.gdpr_datarequest.newValue;
                   personalData.save();
                   //Notify GDPR Helper that the answer has been processed
-                  fetch('http://localhost:3000/dataRequestAnswer/process/' + answer.dataRequestAnswerId, {
-                    method: 'PUT',
-                    headers: {'Content-Type': 'application/json'},
-                  })
+                  fetch('http://localhost:3000/dataRequestAnswer/process/' + answer.dataRequestAnswerId, myInitPUT)
                 }
               });
               break;
             case 'DELETION':
+              let myHeaders = new Headers();
+              console.log(process.env.GDPRMS_API_KEY)
+              myHeaders.append("api-key", process.env.GDPRMS_API_KEY);
+              let myInit = { method: 'GET',
+                headers: myHeaders,
+              };
               personalData.deleteOne({ _id: answer.gdpr_datarequest.gdpr_data.data_ID_ref }, (err) => {
                 if (err) {
                   console.log(err);
                 } else {
                   console.log('deleted');
                   //Notify GDPR Helper that the answer has been processed
-                  fetch('http://localhost:3000/dataRequestAnswer/process/' + answer.dataRequestAnswerId, {
-                    method: 'PUT',
-                    headers: {'Content-Type': 'application/json'},
-                  })
+                  fetch('http://localhost:3000/dataRequestAnswer/process/' + answer.dataRequestAnswerId, myInitPUT)
                 }
               });
           }
@@ -171,7 +184,40 @@ app.get("/", (req, res) => {
     title: 'Apis'
   });
 });
+//Route to get the data subject api key from the frontend in a way that only logged in user can access it
+app.get("/get-apiKey", (req, res) => {
+  try {
+    let myHeaders = new Headers();
+    console.log(process.env.GDPRMS_API_KEY)
+    myHeaders.append("api-key", process.env.GDPRMS_API_KEY);
+    let myInit = { method: 'GET',
+      headers: myHeaders,
+    };
+    fetch(process.env.GDPRMS_API_ADDRESS +'/dataSubject/getByIdRef/' + req.user.id, {
+      method: 'GET',
+      headers: myHeaders,
+    }).then(async response => {
+      res = await response.json();
+      const userApiKey = await
+          res.status(200).json({
+            status: true,
+            apiKey: res.data.apiKey
+          });
+    }).catch(err => {
+      res.status(400).json({
+        errorMessage: 'Something went wrong!',
+        status: false
+      });
+    })
 
+  } catch (e) {
+    res.status(400).json({
+      errorMessage: 'Something went wrong!',
+      status: false
+    });
+  }
+
+});
 /* login api */
 app.post("/login", (req, res) => {
   try {
@@ -487,6 +533,7 @@ app.get("/get-personalData", (req, res) => {
   }
 
 });
+
 
 app.listen(2000, () => {
   console.log("Server is Runing On port 2000");
