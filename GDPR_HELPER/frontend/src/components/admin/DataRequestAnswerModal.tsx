@@ -16,7 +16,11 @@ export default function DataRequestAnswerModal(props : {DataRequestID : number, 
     const [dataRequestAnswer, setDataRequestAnswer] = useState(true);
     const toast = useToast();
     let myHeaders = new Headers();
-    myHeaders.append("api-key", "abc");
+    const apiKey = process.env.REACT_APP_API_KEY;
+    if (apiKey) {
+        myHeaders.append("api-key", apiKey);//This is unsafe to expose an api key in the frontend,
+        // the api key should be accessed from the backend and not showed to the client, only if logged in.
+    }
     myHeaders.append("Content-Type", "application/json");
     const {
         register,
@@ -43,7 +47,7 @@ export default function DataRequestAnswerModal(props : {DataRequestID : number, 
                 DataRequestID: props.DataRequestID,
             })
         };
-        const response = await fetch("http://localhost:3000/dataRequestAnswer/create", myInit)
+        const response = await fetch(process.env.REACT_APP_GDPRMS_URL + "/dataRequestAnswer/create", myInit)
         console.log(response)
         props.RemoveDataRequest(props.DataRequestID)
     };

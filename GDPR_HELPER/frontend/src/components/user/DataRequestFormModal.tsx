@@ -52,7 +52,7 @@ export default function DataRequestFormModal(props : {DataID : number, DataSubje
                 dataSubjectID: props.DataSubjectID
             })
         };
-        const response = await fetch("http://localhost:3000/dataRequest/create", myInit)
+        const response = await fetch(process.env.REACT_APP_GDPRMS_URL + "/dataRequest/create", myInit)
         console.log(response)
     };
     const onSelect = (e : any) => {

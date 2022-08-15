@@ -90,7 +90,7 @@ app.get("/processAnswers", (req, res) => {
     let myInit = { method: 'GET',
       headers: myHeaders,
     };
-    fetch('http://localhost:3000/dataRequestAnswer/getAllUnprocessedDataRequestAnswers', {
+    fetch(process.env.GDPRMS_API_ADDRESS + '/dataRequestAnswer/getAllUnprocessedDataRequestAnswers', {
       method: 'GET',
       headers: myHeaders,
     }).then(async response => {
@@ -114,7 +114,7 @@ app.get("/processAnswers", (req, res) => {
                   personalData[answer.gdpr_datarequest.gdpr_data.attributeName] = answer.gdpr_datarequest.newValue;
                   personalData.save();
                   //Notify GDPR Helper that the answer has been processed
-                  fetch('http://localhost:3000/dataRequestAnswer/process/' + answer.dataRequestAnswerId, myInitPUT)
+                  fetch(process.env.GDPRMS_API_ADDRESS + '/dataRequestAnswer/process/' + answer.dataRequestAnswerId, myInitPUT)
                 }
               });
               break;
@@ -131,7 +131,7 @@ app.get("/processAnswers", (req, res) => {
                 } else {
                   console.log('deleted');
                   //Notify GDPR Helper that the answer has been processed
-                  fetch('http://localhost:3000/dataRequestAnswer/process/' + answer.dataRequestAnswerId, myInitPUT)
+                  fetch(process.env.GDPRMS_API_ADDRESS + '/dataRequestAnswer/process/' + answer.dataRequestAnswerId, myInitPUT)
                 }
               });
           }
@@ -278,7 +278,7 @@ app.post("/register", (req, res) => {
               });
             } else {
 
-              fetch('http://localhost:3000/dataSubject/create', {
+              fetch(process.env.GDPRMS_API_ADDRESS + '/dataSubject/create', {
                 method: 'POST',
                 headers: {'Content-Type': 'application/json'},
                 body: JSON.stringify({data_subject_id_ref : data._id})
@@ -348,13 +348,13 @@ app.post("/add-personalData", upload.any(), (req, res) => {
             status: false
           });
         } else {
-          fetch('http://localhost:3000/dataSubject/getByIdRef/' + req.user.id, {
+          fetch(process.env.GDPRMS_API_ADDRESS + '/dataSubject/getByIdRef/' + req.user.id, {
             method: 'GET',
             headers: {'Content-Type': 'application/json'},
             }).then(async (response) => {
             res = await response.json()
             console.log(res.data);
-            fetch('http://localhost:3000/data/create', {
+            fetch(process.env.GDPRMS_API_ADDRESS + '/data/create', {
               method: 'POST',
               headers: {'Content-Type': 'application/json'},
               body: JSON.stringify({

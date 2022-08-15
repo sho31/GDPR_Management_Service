@@ -49,7 +49,7 @@ export default function DataRequestFORGETFormModal(props : {DataSubjectID : numb
                 dataSubjectID: props.DataSubjectID
             })
         };
-        const response = await fetch("http://localhost:3000/dataRequest/create", myInit)
+        const response = await fetch(process.env.REACT_APP_GDPRMS_URL + "/dataRequest/create", myInit)
         console.log(response)
     };
 
