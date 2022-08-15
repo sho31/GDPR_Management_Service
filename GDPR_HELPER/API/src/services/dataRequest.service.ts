@@ -63,7 +63,7 @@ class DataRequestService {
   public async createDataRequest(dataRequestData: gdpr_datarequest): Promise<gdpr_datarequest> {
     if (isEmpty(dataRequestData)) throw new HttpException(400, 'There is no dataRequest Data');
     if (!(dataRequestData.dataReqType in dataRequestType))
-      throw new HttpException(401, 'The data Request Type is not valid : it must be RECTIFICATION or DELETION');
+      throw new HttpException(401, 'The data Request Type is not valid : it must be RECTIFICATION, DELETION, or FORGET');
 
     return await this.dataRequests.create({
       data: {
@@ -83,7 +83,7 @@ class DataRequestService {
 
     const findDataRequest: gdpr_datarequest = await this.dataRequests.findUnique({ where: { DataRequestID: dataRequestId } });
     if (!(dataRequestData.dataReqType in dataRequestType))
-      throw new HttpException(401, 'The data Request Type is not valid : it must be RECTIFICATION or DELETION');
+      throw new HttpException(401, 'The data Request Type is not valid : it must be RECTIFICATION, DELETION, or FORGET');
     if (!findDataRequest) throw new HttpException(404, 'There is no dataRequest with the given dataRequestId');
     return await this.dataRequests.update({
       where: { DataRequestID: dataRequestId },

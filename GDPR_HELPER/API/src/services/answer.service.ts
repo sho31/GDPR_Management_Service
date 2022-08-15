@@ -1,4 +1,4 @@
-import { gdpr_datarequestanswer, PrismaClient } from '@prisma/client';
+import { gdpr_datarequestanswer, gdpr_datarequest, PrismaClient } from '@prisma/client';
 import { HttpException } from '@exceptions/HttpException';
 import { isEmpty } from '@utils/util';
 import fetch from 'node-fetch';
@@ -48,6 +48,10 @@ class AnswerService {
       if (dataRequest.dataReqType === 'DELETION' && answerData.acceptedRequest === true) {
         await this.dataService.flagAsDeleted(answerData.DataRequestID);
       }
+      if (dataRequest.dataReqType === 'FORGET' && answerData.acceptedRequest === true) {
+        const request: gdpr_datarequest = await this.dataRequestService.findDataRequestById(answerData.DataRequestID);
+        await this.dataService.flagAllFromDataSubjectAsDeleted(request.dataSubjectID);
+      }
       fetch(process.env.API_ENDPOINT_PROCESS_DATA_REQUEST_ANSWERS);
       return res;
       //Call the api endpoint to notify the application that an answer has been created
@@ -58,7 +62,6 @@ class AnswerService {
 
   public async updateAnswer(dataRequestAnswerId: number, answerData: gdpr_datarequestanswer): Promise<gdpr_datarequestanswer> {
     if (isEmpty(answerData)) throw new HttpException(400, 'There is no answerData provided');
-
     const findAnswer: gdpr_datarequestanswer = await this.answers.findUnique({ where: { dataRequestAnswerId: dataRequestAnswerId } });
     if (!findAnswer) throw new HttpException(404, 'There is no answer with this id ' + dataRequestAnswerId);
 

@@ -6,8 +6,7 @@ export default function UserDashboard() {
     let id = Number(useParams().DataSubjectID);
     console.log("id", id)
     const [searchParams, setSearchParams] = useSearchParams();
-    searchParams.get("__firebase_request_key")
-    let apiKey = searchParams.get("apiKey")
+    let apiKey = searchParams.get("api-key")
     if (!apiKey) {
         apiKey = "abc"
     }

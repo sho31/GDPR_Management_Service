@@ -4,4 +4,5 @@ export type BatchPayload = {
 export enum dataRequestType {
   RECTIFICATION = 'RECTIFICATION',
   DELETION = 'DELETION',
+  FORGET = 'FORGET',
 }

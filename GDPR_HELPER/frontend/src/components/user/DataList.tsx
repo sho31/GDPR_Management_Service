@@ -12,8 +12,9 @@ import {
 } from '@chakra-ui/react'
 import {useEffect, useState} from "react";
 import type {Data} from "../../declaration"
-import RequestModal from "./DataRequestFormModal";
 import DataRequestFormModal from "./DataRequestFormModal";
+import DataRequestFORGETFormModal from "./DataRequestFORGETFormModal";
+
 
 
 export default function DataList(props : {DataSubjectID : number, apiKey : string}) {
@@ -69,9 +70,21 @@ export default function DataList(props : {DataSubjectID : number, apiKey : strin
             <a
                 href={`data:text/json;charset=utf-8,${encodeURIComponent(JSON.stringify(dataPortability))}`}
                 download="PersonalData.json"
+                style= {{ display: 'block',
+                    width: '115px',
+                    height: '25px',
+                    background: '#4E9CAF',
+                    padding: '10px',
+                    textAlign: 'center',
+                    borderRadius: '5px',
+                    color: 'white',
+                    fontWeight: 'bold',
+                    lineHeight: '25px'}}
             >
                 {`Download Personal Data (RIGHT TO PORTABILITY)`}
             </a>
+            <DataRequestFORGETFormModal DataSubjectID={props.DataSubjectID} apiKey={props.apiKey}/>
+
         <TableContainer>
             <Table variant='simple'>
                 <TableCaption>Data</TableCaption>
@@ -93,7 +106,7 @@ export default function DataList(props : {DataSubjectID : number, apiKey : strin
                             <Td>{data.oldValue}</Td>
                             <Td>{data.source}</Td>
                             <Td>{data.creationDate}</Td>
-                            <Td> <DataRequestFormModal DataID={data.dataID} DataSubjectID={data.dataSubjectID}/> </Td>
+                            <Td> <DataRequestFormModal DataID={data.dataID} DataSubjectID={data.dataSubjectID} apiKey={props.apiKey}/> </Td>
                         </Tr>
                     ) })}
 
