@@ -14,7 +14,7 @@ class ProviderService {
     if (isEmpty(providerID)) throw new HttpException(400, 'There is no  providerID provided');
 
     const findProvider: gdpr_provider = await this.providers.findUnique({ where: { providerID: providerID } });
-    if (!findProvider) throw new HttpException(409, 'There is no provider with the given ID' + providerID);
+    if (!findProvider) throw new HttpException(404, 'There is no provider with the given ID' + providerID);
 
     return findProvider;
   }
@@ -23,7 +23,7 @@ class ProviderService {
     if (isEmpty(providerData)) throw new HttpException(402, 'There is no  providerData provided');
 
     const allProvider: gdpr_provider[] = await this.providers.findMany();
-    if (allProvider.length >= 1) throw new HttpException(409, `There can only be one provider`);
+    if (allProvider.length >= 1) throw new HttpException(404, `There can only be one provider`);
 
     const createProviderData: gdpr_provider = await this.providers.create({ data: { ...providerData } });
     return createProviderData;
@@ -31,10 +31,10 @@ class ProviderService {
 
   public async updateProvider(providerID: number, providerData: gdpr_provider): Promise<gdpr_provider> {
     if (isEmpty(providerID)) throw new HttpException(400, 'There is no  providerID provided');
-    if (isEmpty(providerData)) throw new HttpException(402, 'There is no  providerData provided');
+    if (isEmpty(providerData)) throw new HttpException(400, 'There is no  providerData provided');
 
     const findProvider: gdpr_provider = await this.providers.findUnique({ where: { providerID: providerID } });
-    if (!findProvider) throw new HttpException(409, 'There is no  provider with the given ID');
+    if (!findProvider) throw new HttpException(404, 'There is no  provider with the given ID');
 
     const updateProviderData = await this.providers.update({ where: { providerID: providerID }, data: { ...providerData } });
     return updateProviderData;
@@ -44,7 +44,7 @@ class ProviderService {
     if (isEmpty(providerID)) throw new HttpException(400, 'There is no  providerID provided');
 
     const findProvider: gdpr_provider = await this.providers.findUnique({ where: { providerID: providerID } });
-    if (!findProvider) throw new HttpException(409, 'There is no provider with the given ID');
+    if (!findProvider) throw new HttpException(404, 'There is no provider with the given ID');
 
     const deleteProviderData = await this.providers.delete({ where: { providerID: providerID } });
     return deleteProviderData;

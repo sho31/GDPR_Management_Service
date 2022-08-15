@@ -30,6 +30,12 @@ class DataRoute implements Routes {
       apiKeyAuthMiddleware,
       this.dataController.deleteAllFromDataSubject,
     );
+    this.router.delete(
+      `${this.path}/flagAllAsDeletedFromDataSubject/:dataSubjectID(\\d+)`,
+      apiKeyAuthMiddleware,
+      this.dataController.flagAllAsDeletedFromDataSubject,
+    );
+    this.router.delete(`${this.path}/flagAsDeleted/:dataID(\\d+)`, apiKeyAuthMiddleware, this.dataController.flagAsDeleted);
   }
 }
 

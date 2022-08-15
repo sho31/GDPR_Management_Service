@@ -14,7 +14,7 @@ class DataSubjectCategoryService {
     if (isEmpty(dsCategoryID)) throw new HttpException(400, 'There is no  DataSubjectCategoryID provided');
 
     const findDataSubjectCategory: gdpr_datasubjectcategory = await this.datasubjectcategories.findUnique({ where: { dsCategoryID: dsCategoryID } });
-    if (!findDataSubjectCategory) throw new HttpException(409, 'There is no DataSubjectCategory with the given ID');
+    if (!findDataSubjectCategory) throw new HttpException(404, 'There is no DataSubjectCategory with the given ID');
 
     return findDataSubjectCategory;
   }
@@ -29,7 +29,7 @@ class DataSubjectCategoryService {
     if (isEmpty(dsCategoryID)) throw new HttpException(400, 'There is no  DataSubjectCategory ID provided');
 
     const findDataSubjectCategory: gdpr_datasubjectcategory = await this.datasubjectcategories.findUnique({ where: { dsCategoryID: dsCategoryID } });
-    if (!findDataSubjectCategory) throw new HttpException(409, 'There is no DataSubjectCategory with the given ID');
+    if (!findDataSubjectCategory) throw new HttpException(404, 'There is no DataSubjectCategory with the given ID');
     //TODO : check if there is any dataSubject with this dsCategoryID
     return await this.datasubjectcategories.delete({ where: { dsCategoryID: dsCategoryID } });
   }

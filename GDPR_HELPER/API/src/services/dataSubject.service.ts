@@ -13,7 +13,7 @@ class DataSubjectService {
     if (isEmpty(dataSubjectId)) throw new HttpException(400, 'There is no  dataSubjectID provided');
 
     const findDataSubject: gdpr_datasubject = await this.dataSubjects.findUnique({ where: { dataSubjectID: dataSubjectId } });
-    if (!findDataSubject) throw new HttpException(409, 'There is no dataSubject with the given ID');
+    if (!findDataSubject) throw new HttpException(404, 'There is no dataSubject with the given ID');
 
     return findDataSubject;
   }
@@ -21,7 +21,7 @@ class DataSubjectService {
     if (isEmpty(dataSubjectIdRef)) throw new HttpException(400, 'There is no  dataSubjectIDRef provided');
 
     const findDataSubject: gdpr_datasubject = await this.dataSubjects.findUnique({ where: { data_subject_id_ref: dataSubjectIdRef } });
-    if (!findDataSubject) throw new HttpException(409, 'There is no dataSubject with the given ID Ref');
+    if (!findDataSubject) throw new HttpException(404, 'There is no dataSubject with the given ID Ref');
 
     return findDataSubject;
   }
@@ -53,7 +53,7 @@ class DataSubjectService {
     if (isEmpty(dataSubjectId)) throw new HttpException(400, 'There is no  dataSubjectId provided');
     if (isEmpty(dataSubjectData)) throw new HttpException(400, 'There is no  dataSubject Data provided');
     const findDataSubject: gdpr_datasubject = await this.dataSubjects.findUnique({ where: { dataSubjectID: dataSubjectId } });
-    if (!findDataSubject) throw new HttpException(409, 'There is no dataSubject');
+    if (!findDataSubject) throw new HttpException(404, 'There is no dataSubject with the given data subject id');
     return await this.dataSubjects.update({
       where: { dataSubjectID: dataSubjectId },
       data: {
@@ -68,7 +68,7 @@ class DataSubjectService {
     if (isEmpty(dataSubjectId)) throw new HttpException(400, 'There is no dataSubjectId');
 
     const findDataSubject: gdpr_datasubject = await this.dataSubjects.findUnique({ where: { dataSubjectID: dataSubjectId } });
-    if (!findDataSubject) throw new HttpException(409, 'There is no  dataSubject');
+    if (!findDataSubject) throw new HttpException(404, 'There is no  dataSubject');
 
     return await this.dataSubjects.delete({ where: { dataSubjectID: dataSubjectId } });
   }

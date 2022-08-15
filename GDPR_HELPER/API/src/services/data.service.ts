@@ -33,7 +33,7 @@ class DataService {
     if (isEmpty(dataSubjectID)) throw new HttpException(400, 'There is no  dataSubject ID provided');
 
     const findData: gdpr_data[] = await this.datas.findMany({ where: { dataSubjectID: dataSubjectID }, include: { gdpr_datatype: true } });
-    if (!findData) throw new HttpException(409, 'There is no There is no data with the given dataSubjectID');
+    if (!findData) throw new HttpException(404, 'There is no data with the given dataSubjectID');
     console.log('data', findData);
     return findData;
   }
@@ -41,7 +41,7 @@ class DataService {
     if (isEmpty(dataID)) throw new HttpException(400, 'There is no  data ID provided');
 
     const findData: gdpr_data = await this.datas.findUnique({ where: { dataID: dataID } });
-    if (!findData) throw new HttpException(409, 'There is no data with the given ID');
+    if (!findData) throw new HttpException(404, 'There is no data with the given ID');
 
     return findData;
   }
@@ -79,7 +79,7 @@ class DataService {
     if (isEmpty(data)) throw new HttpException(400, 'There is no  Data data provided');
 
     const findData: gdpr_data = await this.datas.findUnique({ where: { dataID: dataID } });
-    if (!findData) throw new HttpException(409, 'There is no  Data with the given ID');
+    if (!findData) throw new HttpException(404, 'There is no  Data with the given ID');
 
     return await this.datas.update({
       where: { dataID: dataID },
@@ -98,7 +98,7 @@ class DataService {
     if (isEmpty(dataID)) throw new HttpException(400, 'There is no dataID provided');
 
     const findData: gdpr_data = await this.datas.findUnique({ where: { dataID: dataID } });
-    if (!findData) throw new HttpException(409, 'There is no data with the given ID');
+    if (!findData) throw new HttpException(404, 'There is no data with the given ID');
 
     return await this.datas.update({
       where: { dataID: dataID },
@@ -109,7 +109,7 @@ class DataService {
     if (isEmpty(dataSubjectID)) throw new HttpException(400, 'There is no dataSubjectID');
 
     const findData: gdpr_data[] = await this.datas.findMany({ where: { dataSubjectID: dataSubjectID } });
-    if (!findData) throw new HttpException(409, 'There is no data with the given dataSubjectID');
+    if (!findData) throw new HttpException(404, 'There is no data with the given dataSubjectID');
     for (const d of findData) {
       await this.datas.update({
         where: { dataID: d.dataID },
@@ -123,7 +123,7 @@ class DataService {
     if (isEmpty(dataID)) throw new HttpException(400, 'There is no dataID');
 
     const findData: gdpr_data = await this.datas.findUnique({ where: { dataID: dataID } });
-    if (!findData) throw new HttpException(409, 'There is no data');
+    if (!findData) throw new HttpException(404, 'There is no data with the given dataID');
 
     return await this.datas.delete({ where: { dataID: dataID } });
   }
@@ -132,7 +132,7 @@ class DataService {
     if (isEmpty(dataSubjectID)) throw new HttpException(400, 'There is no dataSubjectID');
 
     const findData: gdpr_data[] = await this.datas.findMany({ where: { dataSubjectID: dataSubjectID } });
-    if (!findData) throw new HttpException(409, 'There is no data with this dataSubjectID');
+    if (!findData) throw new HttpException(404, 'There is no data with this dataSubjectID');
 
     return await this.datas.deleteMany({ where: { dataSubjectID: dataSubjectID } });
   }

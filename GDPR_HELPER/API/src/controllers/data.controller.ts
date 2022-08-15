@@ -92,6 +92,27 @@ class DataController {
       next(error);
     }
   };
+  public flagAsDeleted = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
+    try {
+      const dataId = Number(req.params.dataID);
+      const deleteDataData: gdpr_data = await this.dataService.flagAsDeleted(dataId);
+
+      res.status(200).json({ data: deleteDataData, message: 'deleted' });
+    } catch (error) {
+      next(error);
+    }
+  };
+
+  public flagAllAsDeletedFromDataSubject = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
+    try {
+      const dataSubjectID = Number(req.params.dataSubjectID);
+      const deletedData: gdpr_data[] = await this.dataService.flagAllFromDataSubjectAsDeleted(dataSubjectID);
+
+      res.status(200).json({ data: deletedData, message: 'deleted' });
+    } catch (error) {
+      next(error);
+    }
+  };
 }
 
 export default DataController;
