@@ -45,7 +45,6 @@ export default function DataRequestFORGETFormModal(props : {DataSubjectID : numb
                 claim: data.claim,
                 dataReqType: 'FORGET',
                 newValue: '',
-                dataID: null,
                 dataSubjectID: props.DataSubjectID
             })
         };
@@ -59,7 +58,7 @@ export default function DataRequestFORGETFormModal(props : {DataSubjectID : numb
             <Modal isOpen={isOpen} onClose={onClose}>
                 <ModalOverlay />
                 <ModalContent>
-                    <ModalHeader>Data Request Answer</ModalHeader>
+                    <ModalHeader>Data Request</ModalHeader>
                     <ModalCloseButton />
                     <ModalBody>
                         <form action='submit' onSubmit={handleSubmit(onSubmit)}>

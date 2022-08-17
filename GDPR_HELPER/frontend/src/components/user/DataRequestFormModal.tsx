@@ -69,7 +69,7 @@ export default function DataRequestFormModal(props : {DataID : number, DataSubje
             <Modal isOpen={isOpen} onClose={onClose}>
                 <ModalOverlay />
                 <ModalContent>
-                    <ModalHeader>Data Request Answer</ModalHeader>
+                    <ModalHeader>Data Request</ModalHeader>
                     <ModalCloseButton />
                     <ModalBody>
                         <form action='submit' onSubmit={handleSubmit(onSubmit)}>

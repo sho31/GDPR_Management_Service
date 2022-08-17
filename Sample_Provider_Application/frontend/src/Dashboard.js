@@ -126,7 +126,8 @@ export default class Dashboard extends Component {
         'token': this.state.token
       }
     }).then(async (response) => {
-      this.setState({apiKey: response.data.apiKey});
+      this.setState({apiKey: response.data.apiKey})
+      console.log("apikey", response.data.apiKey);
     }).catch((err) => {
       swal({
         text: err.response.data.errorMessage,
@@ -143,7 +144,7 @@ export default class Dashboard extends Component {
     }).then(async (response) => {
       const res = await response.json()
       console.log(res.data)
-      window.open(process.env.REACT_APP_GDPRMS_CLIENT_ADDRESS+'/user/' + res.data.dataSubjectID);
+      window.open(process.env.REACT_APP_GDPRMS_CLIENT_ADDRESS+'/user/' + res.data.dataSubjectID + "?api-key=" + this.state.apiKey);
     }).catch((err) => {
         console.log(err);
     });

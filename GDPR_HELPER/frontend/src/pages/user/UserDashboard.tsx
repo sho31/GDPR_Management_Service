@@ -7,6 +7,8 @@ export default function UserDashboard() {
     console.log("id", id)
     const [searchParams, setSearchParams] = useSearchParams();
     let apiKey = searchParams.get("api-key")
+    console.log("keyfi", apiKey)
+
     if (!apiKey) {
         apiKey = "abc"
     }

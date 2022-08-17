@@ -15,10 +15,11 @@ import type {DataRequest} from "../../declaration"
 import DataRequestAnswerModal from "./DataRequestAnswerModal";
 import * as process from "process";
 let myHeaders = new Headers();
-const apiKey = process.env.REACT_APP_API_KEY;
+const apiKey = process.env.REACT_APP_ADMIN_API_KEY;
 if (apiKey) {
     myHeaders.append("api-key", apiKey);//This is unsafe to expose an api key in the frontend,
     // the api key should be accessed from the backend and not showed to the client, only if logged in.
+    console.log(apiKey)
 }myHeaders.append("Content-Type", "application/json");
 let myInit = { method: 'GET',
     headers: myHeaders
@@ -37,10 +38,13 @@ export default function DataRequestsList() {
         fetch( process.env.REACT_APP_GDPRMS_URL + "/dataRequest/getAllUnanswered", myInit)
             .then(res => res.json())
             .then(async dataRequests => {
+                console.log(dataRequests)
                 let dataRequestsList = []
                 for (const dataRequest of dataRequests.data) {
                     console.log(dataRequest)
-                    dataRequest.oldValue = await fetch(process.env.REACT_APP_API_ENDPOINT_GET_DATA_CONTENT + '/getContent?id='+ dataRequest.gdpr_data.data_ID_ref + "&dataType="+ dataRequest.gdpr_data.gdpr_datatype.dataTypeName + "&attributeName=" +dataRequest.gdpr_data.attributeName).then(res => res.json().then(data => {console.log(data.data); return data.data}));
+                    if(dataRequest.dataReqType !== 'FORGET') {
+                            dataRequest.oldValue = await fetch(process.env.REACT_APP_API_ENDPOINT_GET_DATA_CONTENT + dataRequest.gdpr_data.data_ID_ref + "&dataType="+ dataRequest.gdpr_data.gdpr_datatype.dataTypeName + "&attributeName=" +dataRequest.gdpr_data.attributeName).then(res => res.json().then(data => {console.log(data.data); return data.data}));
+                    }
                     dataRequestsList.push(dataRequest)
                 }
                 setDataRequests(dataRequestsList)
@@ -56,6 +60,7 @@ export default function DataRequestsList() {
                 <Thead>
                     <Tr>
                         <Th>Data Subject Reference ID</Th>
+                        <Th>Database Table name</Th>
                         <Th>Attribute name</Th>
                         <Th>Claim</Th>
                         <Th>Current Value</Th>
@@ -70,9 +75,12 @@ export default function DataRequestsList() {
                     {dataRequests.map((dataRequest, i) => {  return (
                         <Tr key={i}>
                         <Td>{dataRequest.gdpr_datasubject.data_subject_id_ref}</Td>
-                        <Td>{dataRequest.gdpr_data.gdpr_datatype.dataTypeName}</Td>
-                        <Td>{dataRequest.claim}</Td>
-                        <Td>{dataRequest.oldValue}</Td>
+                            { (dataRequest.dataReqType !== "FORGET") ? <Td>{dataRequest.gdpr_data.gdpr_datatype.dataTypeName}</Td> : <Td></Td>}
+                            { (dataRequest.dataReqType !== "FORGET") ? <Td>{dataRequest.gdpr_data.attributeName}</Td> : <Td></Td>}
+
+
+                            <Td>{dataRequest.claim}</Td>
+                            { (dataRequest.dataReqType !== "FORGET") ? <Td>{dataRequest.oldValue}</Td> : <Td></Td>}
                             { (dataRequest.dataReqType === "RECTIFICATION") ? <Td>{dataRequest.newValue}</Td> : <Td></Td>}
                         <Td>{dataRequest.dataReqType}</Td>
                             <Td>{dataRequest.claimDate}</Td>

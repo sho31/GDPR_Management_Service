@@ -15,6 +15,7 @@ var gdpr_helper_init = require("./gdpr_helper_init.js");
 //gdpr_helper_init(); //Execute only once
 var dir = './uploads';
 const fetch = (...args) => import('node-fetch').then(({default: fetch}) => fetch(...args));
+const { Headers } = fetch;
 require('dotenv').config()
 var upload = multer({
   storage: multer.diskStorage({
@@ -48,14 +49,14 @@ app.get("/getContent", (req, res) => {
     if (req.query.dataType === "personalData") {
       console.log(req.query)
       personalData.findById(req.query.id, (err, data) => {
-        console.log(data)
+        console.log("data",data)
 
         if (err) {
           res.status(400).json({
             status: false,
             errorMessage: err,
           });
-        } else if (data !== null) {
+        } else if (data !== undefined) {
           res.json({
             status: true,
             data: data[req.query.attributeName],
@@ -84,26 +85,19 @@ app.get("/getContent", (req, res) => {
 app.get("/processAnswers", (req, res) => {
   console.log("Processing answers");
   try {
-    let myHeaders = new Headers();
-    console.log(process.env.GDPRMS_API_KEY)
-    myHeaders.append("api-key", process.env.GDPRMS_API_KEY);
-    let myInit = { method: 'GET',
-      headers: myHeaders,
-    };
+
     fetch(process.env.GDPRMS_API_ADDRESS + '/dataRequestAnswer/getAllUnprocessedDataRequestAnswers', {
       method: 'GET',
-      headers: myHeaders,
+      headers: {'api-key' :  process.env.GDPRMS_API_KEY},
     }).then(async response => {
       res = await response.json();
       res.data.forEach(answer => {
         console.log(answer)
         if(Boolean(answer.acceptedRequest)){
           const reqType = answer.gdpr_datarequest.dataReqType;
-          let myHeadersPUT = myHeaders
-          myHeadersPUT.append("Content-Type", "application/json");
-          myHeadersPUT.append("api-key", process.env.GDPRMS_API_KEY);
           let myInitPUT = { method: 'PUT',
-            headers: myHeadersPUT,
+            headers: {'api-key' :  process.env.GDPRMS_API_KEY,
+              "Content-Type": "application/json"},
           };
           switch (reqType) {
             case 'RECTIFICATION':
@@ -119,21 +113,42 @@ app.get("/processAnswers", (req, res) => {
               });
               break;
             case 'DELETION':
-              let myHeaders = new Headers();
-              console.log(process.env.GDPRMS_API_KEY)
-              myHeaders.append("api-key", process.env.GDPRMS_API_KEY);
-              let myInit = { method: 'GET',
-                headers: myHeaders,
-              };
               personalData.deleteOne({ _id: answer.gdpr_datarequest.gdpr_data.data_ID_ref }, (err) => {
                 if (err) {
                   console.log(err);
                 } else {
                   console.log('deleted');
                   //Notify GDPR Helper that the answer has been processed
-                  fetch(process.env.GDPRMS_API_ADDRESS + '/dataRequestAnswer/process/' + answer.dataRequestAnswerId, myInitPUT)
+                  fetch(process.env.GDPRMS_API_ADDRESS + '/dataRequestAnswer/process/' + answer.dataRequestAnswerId, {
+                    method: 'PUT',
+                    headers: {'api-key' :  process.env.GDPRMS_API_KEY},
+                  })
                 }
               });
+              break;
+            case 'FORGET':
+              fetch(process.env.GDPRMS_API_ADDRESS + "/data/getAllByDataSubjectId/" + answer.gdpr_datarequest.dataSubjectID, {
+                method: 'GET',
+                headers: {'api-key' :  process.env.GDPRMS_API_KEY},
+              }).then(async (response) => {
+                console.log("data", response)
+                const resp = await response.json();
+                console.log("data", resp.data)
+                resp.data.forEach((d) => {
+                  personalData.deleteOne({_id: d.data_ID_ref}, (err) => {
+                    if (err) {
+                      console.log(err);
+                    } else {
+                      console.log('deleted', d);
+                      //Notify GDPR Helper that the answer has been processed
+                    }
+                  });
+                })
+                fetch(process.env.GDPRMS_API_ADDRESS + '/dataRequestAnswer/process/' + answer.dataRequestAnswerId, {
+                  method: 'PUT',
+                  headers: {'api-key': process.env.GDPRMS_API_KEY},
+                })
+              }).catch(e => {console.log(e.message)})
           }
         }
 
@@ -187,32 +202,29 @@ app.get("/", (req, res) => {
 //Route to get the data subject api key from the frontend in a way that only logged in user can access it
 app.get("/get-apiKey", (req, res) => {
   try {
-    let myHeaders = new Headers();
-    console.log(process.env.GDPRMS_API_KEY)
-    myHeaders.append("api-key", process.env.GDPRMS_API_KEY);
-    let myInit = { method: 'GET',
-      headers: myHeaders,
-    };
     fetch(process.env.GDPRMS_API_ADDRESS +'/dataSubject/getByIdRef/' + req.user.id, {
       method: 'GET',
-      headers: myHeaders,
+      headers: {'api-key' :  process.env.GDPRMS_API_KEY},
     }).then(async response => {
-      res = await response.json();
+      const resp = await response.json();
       const userApiKey = await
           res.status(200).json({
             status: true,
-            apiKey: res.data.apiKey
-          });
+            apiKey: resp.data.apiKey
+          })
     }).catch(err => {
       res.status(400).json({
         errorMessage: 'Something went wrong!',
+        err : err.message,
         status: false
       });
     })
 
   } catch (e) {
+    console.log(e.message)
     res.status(400).json({
       errorMessage: 'Something went wrong!',
+      error : e.message,
       status: false
     });
   }
@@ -350,13 +362,14 @@ app.post("/add-personalData", upload.any(), (req, res) => {
         } else {
           fetch(process.env.GDPRMS_API_ADDRESS + '/dataSubject/getByIdRef/' + req.user.id, {
             method: 'GET',
-            headers: {'Content-Type': 'application/json'},
+            headers: {'api-key' : process.env.GDPRMS_API_KEY},
             }).then(async (response) => {
             res = await response.json()
-            console.log(res.data);
+            console.log("data",res.data);
             fetch(process.env.GDPRMS_API_ADDRESS + '/data/create', {
               method: 'POST',
-              headers: {'Content-Type': 'application/json'},
+              headers: {'Content-Type': 'application/json',
+                'api-key' : process.env.GDPRMS_API_KEY},
               body: JSON.stringify({
                 data_ID_ref: data._id,
                 attributeName: 'content',

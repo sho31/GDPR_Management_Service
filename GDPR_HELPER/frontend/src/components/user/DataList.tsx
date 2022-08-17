@@ -8,7 +8,9 @@ import {
     Td,
     TableCaption,
     TableContainer,
-    Button
+    Flex,
+    Box,
+    Spacer
 } from '@chakra-ui/react'
 import {useEffect, useState} from "react";
 import type {Data} from "../../declaration"
@@ -67,24 +69,30 @@ export default function DataList(props : {DataSubjectID : number, apiKey : strin
 
     return (
         <>
-            <a
-                href={`data:text/json;charset=utf-8,${encodeURIComponent(JSON.stringify(dataPortability))}`}
-                download="PersonalData.json"
-                style= {{ display: 'block',
-                    width: '115px',
-                    height: '25px',
-                    background: '#4E9CAF',
-                    padding: '10px',
-                    textAlign: 'center',
-                    borderRadius: '5px',
-                    color: 'white',
-                    fontWeight: 'bold',
-                    lineHeight: '25px'}}
-            >
-                {`Download Personal Data (RIGHT TO PORTABILITY)`}
-            </a>
-            <DataRequestFORGETFormModal DataSubjectID={props.DataSubjectID} apiKey={props.apiKey}/>
-
+            <Flex>
+            <Box p='3' >
+                <a
+                    href={`data:text/json;charset=utf-8,${encodeURIComponent(JSON.stringify(dataPortability))}`}
+                    download="PersonalData.json"
+                    style= {{ display: 'block',
+                        width: '500px',
+                        height: '50px',
+                        background: '#4E9CAF',
+                        padding: '10px',
+                        textAlign: 'center',
+                        borderRadius: '5px',
+                        color: 'white',
+                        fontWeight: 'bold',
+                        lineHeight: '25px'}}
+                >
+                    {`Download Personal Data (RIGHT TO PORTABILITY)`}
+                </a>
+            </Box>
+            <Spacer />
+            <Box p='3'>
+                <DataRequestFORGETFormModal DataSubjectID={props.DataSubjectID} apiKey={props.apiKey}/>
+            </Box>
+        </Flex>
         <TableContainer>
             <Table variant='simple'>
                 <TableCaption>Data</TableCaption>

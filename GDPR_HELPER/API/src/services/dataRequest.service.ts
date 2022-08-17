@@ -64,18 +64,30 @@ class DataRequestService {
     if (isEmpty(dataRequestData)) throw new HttpException(400, 'There is no dataRequest Data');
     if (!(dataRequestData.dataReqType in dataRequestType))
       throw new HttpException(401, 'The data Request Type is not valid : it must be RECTIFICATION, DELETION, or FORGET');
-
-    return await this.dataRequests.create({
-      data: {
-        claim: dataRequestData.claim,
-        claimDate: new Date(),
-        newValue: dataRequestData.newValue,
-        oldValue: dataRequestData.oldValue,
-        dataReqType: dataRequestData.dataReqType,
-        dataSubjectID: Number(dataRequestData.dataSubjectID),
-        dataID: Number(dataRequestData.dataID),
-      },
-    });
+    if (dataRequestData.dataReqType === 'FORGET') {
+      return await this.dataRequests.create({
+        data: {
+          claim: dataRequestData.claim,
+          claimDate: new Date(),
+          newValue: dataRequestData.newValue,
+          oldValue: dataRequestData.oldValue,
+          dataReqType: dataRequestData.dataReqType,
+          dataSubjectID: Number(dataRequestData.dataSubjectID),
+        },
+      });
+    } else {
+      return await this.dataRequests.create({
+        data: {
+          claim: dataRequestData.claim,
+          claimDate: new Date(),
+          newValue: dataRequestData.newValue,
+          oldValue: dataRequestData.oldValue,
+          dataReqType: dataRequestData.dataReqType,
+          dataSubjectID: Number(dataRequestData.dataSubjectID),
+          dataID: Number(dataRequestData.dataID),
+        },
+      });
+    }
   }
 
   public async updateDataRequest(dataRequestId: number, dataRequestData: gdpr_datarequest): Promise<gdpr_datarequest> {
