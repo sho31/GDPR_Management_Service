@@ -1,9 +1,7 @@
 import { NextFunction, Response } from 'express';
-import { verify } from 'jsonwebtoken';
 import { PrismaClient, gdpr_datasubject } from '@prisma/client';
-import { SECRET_KEY } from '@config';
 import { HttpException } from '@exceptions/HttpException';
-import { DataStoredInToken, CustomRequest } from '@interfaces/auth.interface';
+import { CustomRequest } from '@interfaces/auth.interface';
 import { isEmpty } from '@utils/util';
 
 const dataSubjects = new PrismaClient().gdpr_datasubject;
@@ -39,6 +37,7 @@ const checkApiKeyAdmin = async (apiKeyHeader: String) => {
 const apiKeyAuthMiddleware = async (req: CustomRequest, res: Response, next: NextFunction) => {
   try {
     const apiKeyHeader: string = req.headers['api-key'];
+    let authenticated: Boolean = false; //to avoid calling next() twice
     console.info(apiKeyHeader);
     console.log('path', req.path);
     console.log('body', req.body);
@@ -51,30 +50,25 @@ const apiKeyAuthMiddleware = async (req: CustomRequest, res: Response, next: Nex
     ) {
       if (req.path.includes('/data/getAllByDataSubjectId/')) {
         if (await checkApiKeyDataSubject(Number(req.params.dataSubjectID), apiKeyHeader)) {
+          authenticated = true;
           next();
-        } else {
-          if (await checkApiKeyAdmin(apiKeyHeader)) {
-            next();
-          } else {
-            next(new HttpException(401, 'Wrong or no api key provided'));
-          }
         }
       } else if (req.path.includes('/dataRequest/create')) {
         if (await checkApiKeyDataSubject(Number(req.body.dataSubjectID), apiKeyHeader)) {
+          authenticated = true;
           next();
-        } else {
-          next(new HttpException(401, 'Wrong or no api key provided'));
         }
       } else if (req.path.includes('/dataSubject/getByIdRef/')) {
         if (await checkApiKeyDataSubjectIdRef(req.params.data_subject_id_ref, apiKeyHeader)) {
+          authenticated = true;
           next();
-        } else {
-          if (await checkApiKeyAdmin(apiKeyHeader)) {
-            next();
-          } else {
-            next(new HttpException(401, 'Wrong or no api key provided'));
-          }
         }
+      }
+      if (!authenticated && (await checkApiKeyAdmin(apiKeyHeader))) {
+        // If the api key is the admin key, then the request is authenticated even for data subject methods
+        next();
+      } else {
+        next(new HttpException(401, 'Wrong or no api key provided'));
       }
     } else {
       //Admin methods

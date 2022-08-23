@@ -17,7 +17,14 @@ class AnswerService {
     return await this.answers.findMany();
   }
   public async findAllUnprocessedAnswer(): Promise<gdpr_datarequestanswer[]> {
-    return await this.answers.findMany({ where: { processedAnswer: false }, include: { gdpr_datarequest: { include: { gdpr_data: true } } } });
+    return await this.answers.findMany({
+      where: { processedAnswer: false },
+      include: {
+        gdpr_datarequest: {
+          include: { gdpr_data: true },
+        },
+      },
+    });
   }
 
   public async findAnswerById(dataRequestAnswerId: number): Promise<gdpr_datarequestanswer> {

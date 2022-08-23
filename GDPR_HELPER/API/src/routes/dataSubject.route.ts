@@ -1,7 +1,6 @@
 import { Router } from 'express';
 import DataSubjectController from '@controllers/dataSubject.controller';
 import { Routes } from '@interfaces/routes.interface';
-import validationMiddleware from '@middlewares/validation.middleware';
 import apiKeyAuthMiddleware from '@middlewares/apiKey.middleware';
 
 class DataSubjectsRoute implements Routes {

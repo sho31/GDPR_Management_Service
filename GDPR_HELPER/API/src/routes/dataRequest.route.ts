@@ -1,7 +1,6 @@
 import { Router } from 'express';
 import DataRequestsController from '@controllers/dataRequest.controller';
 import { Routes } from '@interfaces/routes.interface';
-import validationMiddleware from '@middlewares/validation.middleware';
 import apiKeyAuthMiddleware from '@middlewares/apiKey.middleware';
 
 class DataRequestsRoute implements Routes {
