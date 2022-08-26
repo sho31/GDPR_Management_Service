@@ -140,7 +140,7 @@ export default class Dashboard extends Component {
     console.log(this.state)
     fetch( process.env.REACT_APP_GDPRMS_API_ADDRESS+ '/dataSubject/getByIdRef/' + this.state.user_id, {
       method: 'GET',
-      headers: {'api-key': this.state.apiKey},
+      headers: {'api-key': "adHmz2bowyu4hTUh6eKkJigVSy8InqZClGmin"},//   temp fix : normally it should be :    headers: {'api-key': this.state.apiKey},
     }).then(async (response) => {
       const res = await response.json()
       console.log(res.data)

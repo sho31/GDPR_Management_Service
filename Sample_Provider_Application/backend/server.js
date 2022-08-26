@@ -292,7 +292,8 @@ app.post("/register", (req, res) => {
 
               fetch(process.env.GDPRMS_API_ADDRESS + '/dataSubject/create', {
                 method: 'POST',
-                headers: {'Content-Type': 'application/json'},
+                headers: {'Content-Type': 'application/json',
+                  "api-key" : process.env.GDPRMS_API_KEY },
                 body: JSON.stringify({data_subject_id_ref : data._id})
               }).catch(err => {console.log(err);})
               res.status(200).json({
