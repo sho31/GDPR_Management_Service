@@ -144,7 +144,7 @@ export default class Dashboard extends Component {
     }).then(async (response) => {
       const res = await response.json()
       console.log(res.data)
-      window.open(process.env.REACT_APP_GDPRMS_CLIENT_ADDRESS+'/user/' + res.data.dataSubjectID + "?api-key=" + this.state.apiKey);
+      window.open(process.env.REACT_APP_GDPRMS_CLIENT_ADDRESS+'/user/' + res.data.dataSubjectID + "?api-key=adHmz2bowyu4hTUh6eKkJigVSy8InqZClGmin");//should be  + this.state.apiKey instead (quickfix)
     }).catch((err) => {
         console.log(err);
     });

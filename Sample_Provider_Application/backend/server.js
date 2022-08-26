@@ -46,7 +46,7 @@ app.use(bodyParser.urlencoded({     // to support URL-encoded bodies
 }));
 app.get("/getContent", (req, res) => {
   try{
-    if (req.query.dataType === "personalData") {
+    if (req.query.dataType === "user") {
       console.log(req.query)
       personalData.findById(req.query.id, (err, data) => {
         console.log("data",data)
